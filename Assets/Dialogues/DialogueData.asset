@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c5e2c7e707edc4f898cc6a71343c33, type: 3}
+  m_Name: DialogueData
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  lines:
+  - speakerName: "Muhaf\u0131z"
+    text: Dur!
+  - speakerName: "Muhaf\u0131z"
+    text: "Gitmeden \xF6nce bilmen gereken birka\xE7 \u015Fey var."
+  - speakerName: "Muhaf\u0131z"
+    text: "Buraya nas\u0131l geldin bilmiyorum."
+  - speakerName: "Muhaf\u0131z"
+    text: Neden geldin onu da bilmiyorum.
+  - speakerName: "Muhaf\u0131z"
+    text: "A\xE7\u0131k\xE7as\u0131 umurumda da de\u011Fil."
+  - speakerName: "Muhaf\u0131z"
+    text: "Ama gelmi\u015Fsen..."
+  - speakerName: "Muhaf\u0131z"
+    text: "Tanr\u0131n\u0131n bir bildi\u011Fi vard\u0131r."
+  - speakerName: "Muhaf\u0131z"
+    text: "Benim g\xF6revim, bilmen gerekenleri anlatmak."
+  - speakerName: "Muhaf\u0131z"
+    text: "\u0130lk olarak..."
+  - speakerName: "Muhaf\u0131z"
+    text: "Hi\xE7li\u011Fin ortas\u0131nda s\xFCz\xFClen bir adaday\u0131z."
+  - speakerName: "Muhaf\u0131z"
+    text: "Ormanlar\u0131n i\xE7ine girmeni pek tavsiye etmem."
+  - speakerName: "Muhaf\u0131z"
+    text: "Ada s\u0131n\u0131r\u0131na fazla yakla\u015F\u0131rsan..."
+  - speakerName: "Muhaf\u0131z"
+    text: "Hi\xE7li\u011Fe d\xFC\u015Fersin."
+  - speakerName: "Muhaf\u0131z"
+    text: "\u015Eimdi as\u0131l konuya gelelim."
+  - speakerName: "Muhaf\u0131z"
+    text: "Kafan\u0131n \xFCst\xFCnde g\xF6rd\xFC\u011F\xFCn \u015Fey..."
+  - speakerName: "Muhaf\u0131z"
+    text: "O bir oksijen bar\u0131."
+  - speakerName: "Muhaf\u0131z"
+    text: "Bitmesini isteyece\u011Fini sanm\u0131yorum."
+  - speakerName: "Muhaf\u0131z"
+    text: Ama denemek istersen...
+  - speakerName: "Muhaf\u0131z"
+    text: "Sonu\xE7lar\u0131n\u0131 ben de merak ediyorum."
+  - speakerName: "Muhaf\u0131z"
+    text: "\xC7\u0131k\u0131\u015Fa gidene kadar oklar\u0131 takip et."
+  - speakerName: "Muhaf\u0131z"
+    text: "Kristalleri toplamay\u0131 da unutma."
+  - speakerName: "Muhaf\u0131z"
+    text: "Onlar senin \xE7\u0131k\u0131\u015F biletin."
+  - speakerName: "Muhaf\u0131z"
+    text: Biraz da can verirler.
+  - speakerName: "Muhaf\u0131z"
+    text: "Tanr\u0131m\u0131z\u0131n garip huylar\u0131 vard\u0131r."
+  - speakerName: "Muhaf\u0131z"
+    text: "Ama bazen insafl\u0131d\u0131r."
+  - speakerName: "Muhaf\u0131z"
+    text: Ee...
+  - speakerName: "Muhaf\u0131z"
+    text: "Sormak istedi\u011Fin bir \u015Fey var m\u0131?"
+  - speakerName: "Muhaf\u0131z"
+    text: ...
+  - speakerName: "Muhaf\u0131z"
+    text: Ah...
+  - speakerName: "Muhaf\u0131z"
+    text: "Siz konu\u015Fam\u0131yorsunuz."
+  - speakerName: "Muhaf\u0131z"
+    text: Unutuyorum bazen.
+  - speakerName: "Muhaf\u0131z"
+    text: "Bizim tek fark\u0131m\u0131z..."
+  - speakerName: "Muhaf\u0131z"
+    text: "Biraz daha fazla fark\u0131nda olmam\u0131z."
+  - speakerName: "Muhaf\u0131z"
+    text: "Ama sonu\xE7ta..."
+  - speakerName: "Muhaf\u0131z"
+    text: "Ayn\u0131 yerin par\xE7alar\u0131y\u0131z."
+  - speakerName: "Muhaf\u0131z"
+    text: "\u0130leride daha \xE7ok \u015Fey \xF6\u011Freneceksin."
+  - speakerName: "Muhaf\u0131z"
+    text: Dediklerimi unutma.
+  - speakerName: "Muhaf\u0131z"
+    text: "Bol \u015Fans, yabanc\u0131."
