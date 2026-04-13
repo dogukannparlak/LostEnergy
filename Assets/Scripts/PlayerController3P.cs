@@ -25,7 +25,6 @@ public class PlayerController3P : MonoBehaviour
     public float pitchMax =  60f;
 
     private CharacterController _cc;
-    private Animator            _animator;
     private float               _verticalVelocity;
     private float               _yaw;
     private float               _pitch;
@@ -34,7 +33,6 @@ public class PlayerController3P : MonoBehaviour
     void Start()
     {
         _cc       = GetComponent<CharacterController>();
-        _animator = GetComponent<Animator>();
 
         if (cameraTransform == null)
             Debug.LogError("[PlayerController3P] 'cameraTransform' atanmamış!", this);
@@ -131,7 +129,6 @@ public class PlayerController3P : MonoBehaviour
         if (grounded && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            if (_animator != null) _animator.SetTrigger("jump");
         }
 
         _verticalVelocity += gravity * Time.deltaTime;
@@ -165,11 +162,6 @@ public class PlayerController3P : MonoBehaviour
         }
 
         _cc.Move((moveDir * speed + Vector3.up * _verticalVelocity) * Time.deltaTime);
-
-        // Hareket büyüklüğünü 0-1 normalize ederek speed parametresine yaz.
-        // moveDir zaten normalize, bu yüzden sqrMagnitude yerine magnitude kullanılır.
-        float animSpeed = moveDir.magnitude;
-        if (_animator != null) _animator.SetFloat("speed", animSpeed, 0.1f, Time.deltaTime);
     }
 
     bool IsGrounded()

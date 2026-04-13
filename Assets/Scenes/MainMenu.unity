@@ -185,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 4717477261436921633, guid: a0c126a733b53ec459145e34f35812e8, type: 3}
       propertyPath: defaultMusic
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: 2c4aa22c3762d7c43b4ebd7c6bf2495f, type: 3}
     - target: {fileID: 4717477261436921633, guid: a0c126a733b53ec459145e34f35812e8, type: 3}
       propertyPath: sceneMusics.Array.size
       value: 4
