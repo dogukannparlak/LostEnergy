@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
+    // Simple global access for dialogue UI.
     public static DialogueManager Instance;
 
     [Header("UI")]
@@ -16,12 +17,12 @@ public class DialogueManager : MonoBehaviour
     [Header("Settings")]
     public float oxygenResumeDelay = 2f;
 
-    [Header("Ses")]
-    [Tooltip("Diyalog başladığında çalar.")]
+    [Header("Audio")]
+    [Tooltip("Plays when the dialogue starts.")]
     public AudioClip dialogueStartSfx;
-    [Tooltip("Her satır geçişinde çalar.")]
+    [Tooltip("Plays when advancing to the next line.")]
     public AudioClip dialogueNextSfx;
-    [Tooltip("AudioMixer'daki SFX grubunu buraya sürükle.")]
+    [Tooltip("Optional SFX mixer group for dialogue sounds.")]
     public UnityEngine.Audio.AudioMixerGroup sfxMixerGroup;
 
     private AudioSource _audio;
@@ -36,6 +37,8 @@ public class DialogueManager : MonoBehaviour
     {
         Instance = this;
         dialoguePanel.SetActive(false);
+
+        // Reuse or create a 2D audio source for dialogue sounds.
         _audio = GetComponent<AudioSource>();
         if (_audio == null) _audio = gameObject.AddComponent<AudioSource>();
         _audio.spatialBlend = 0f;
@@ -64,6 +67,8 @@ public class DialogueManager : MonoBehaviour
     void Update()
     {
         if (!IsActive) return;
+
+        // Press E to move to the next line.
         if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
             NextLine();
     }
@@ -94,6 +99,8 @@ public class DialogueManager : MonoBehaviour
     {
         IsActive = false;
         dialoguePanel.SetActive(false);
+
+        // Resume oxygen after a short delay.
         StartCoroutine(ResumeOxygenAfterDelay());
     }
 

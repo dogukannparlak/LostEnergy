@@ -13,6 +13,7 @@ public class GameOverRestartButton : MonoBehaviour
 
     void OnClick()
     {
+        // Restore normal game state before reloading.
         Time.timeScale   = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible   = false;

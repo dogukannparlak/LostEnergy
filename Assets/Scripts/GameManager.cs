@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogError("[GameManager] Sahnede birden fazla GameManager var!", gameObject);
+            Debug.LogError("[GameManager] More than one GameManager exists in the scene!", gameObject);
             Destroy(gameObject);
             return;
         }
@@ -97,4 +97,4 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
-} // LostEnergy namespace
+} // LostEnergy

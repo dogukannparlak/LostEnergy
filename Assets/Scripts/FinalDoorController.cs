@@ -5,20 +5,20 @@ public class FinalDoorController : MonoBehaviour, IInteractable
 {
     public enum DoorMode { Loop, Win }
 
-    [Header("Kapı Modu")]
-    [Tooltip("Loop = Döngü (Scene 1'e döner) | Win = Çıkış (Tebrikler ekranı)")]
+    [Header("Door Mode")]
+    [Tooltip("Loop returns to Scene 1. Win shows the congratulations panel.")]
     public DoorMode doorMode = DoorMode.Loop;
 
     [Header("Door")]
     public GameObject doorObject;
 
-    [Header("Tebrikler Paneli (sadece Win modu)")]
-    [Tooltip("Sahnede hazırladığın Tebrikler UI paneli. Sadece Win kapısı için doldur.")]
+    [Header("Congratulations Panel (Win mode only)")]
+    [Tooltip("Assign the congratulations UI panel for the Win door.")]
     public GameObject winPanel;
 
     void Start()
     {
-        // Kapılar bu sahnede her zaman açık (kristal yok)
+        // Doors are always open in this scene.
     }
 
     public string GetPrompt()
@@ -50,7 +50,7 @@ public class FinalDoorController : MonoBehaviour, IInteractable
         Time.timeScale   = 0f;
     }
 
-    // UI butonundan çağrılır: "Ana Menüye Dön" butonu OnClick'ine bağla
+    // Hook this to the Return to Main Menu button.
     public void ReturnToMainMenu()
     {
         Time.timeScale = 1f;

@@ -4,36 +4,34 @@ using UnityEngine;
 public class CrystalSpawner : MonoBehaviour
 {
     [Header("Prefabs")]
-    [Tooltip("Pool of crystal prefabs to choose from. Each spawn picks one at random.")]
+    [Tooltip("Crystal prefabs to pick from at random.")]
     [SerializeField] private GameObject[] prefabs;
 
     [Header("Spawn Settings")]
-    [Tooltip("Maximum number of crystals that should exist under the parent at any time.")]
+    [Tooltip("Maximum number of spawned crystals.")]
     [SerializeField] private int maxCount = 5;
 
-    [Tooltip("Fixed Y position for every spawned crystal.")]
+    [Tooltip("Fixed Y position for spawned crystals.")]
     [SerializeField] private float spawnY = 0f;
 
-    [Tooltip("Minimum distance between any two spawned crystals.")]
+    [Tooltip("Minimum distance between spawned crystals.")]
     [SerializeField] private float minDistance = 1.5f;
 
-    [Tooltip("How many random positions to try before giving up on a single crystal.")]
+    [Tooltip("Max random position attempts per crystal.")]
     [SerializeField] private int maxAttemptsPerObject = 30;
 
     [Header("Spawn Area")]
-    [Tooltip("World-space center of the rectangular spawn area.")]
+    [Tooltip("World-space center of the spawn area.")]
     [SerializeField] private Vector3 areaCenter = Vector3.zero;
 
-    [Tooltip("Width (X) and depth (Z) of the spawn area.")]
+    [Tooltip("Spawn area size on X and Z.")]
     [SerializeField] private Vector2 areaSize = new Vector2(10f, 10f);
 
     [Header("Hierarchy")]
-    [Tooltip("Parent for spawned crystals. Leave empty to spawn under this GameObject.")]
+    [Tooltip("Parent for spawned crystals. Uses this object if empty.")]
     [SerializeField] private Transform spawnParent;
 
     private readonly List<Vector2> _placedPositions = new List<Vector2>();
-
-    // -------------------------------------------------------------------------
 
     private void Start()
     {
@@ -41,8 +39,7 @@ public class CrystalSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Counts existing children and spawns only as many as needed to reach maxCount.
-    /// Safe to call repeatedly (e.g. on player respawn) — will never exceed maxCount.
+    /// Spawns only the missing crystals up to maxCount.
     /// </summary>
     public void SpawnMissing()
     {
@@ -62,7 +59,7 @@ public class CrystalSpawner : MonoBehaviour
             return;
         }
 
-        // Seed distance-check list with already existing children.
+        // Include existing children in the distance check.
         _placedPositions.Clear();
         for (int i = 0; i < parent.childCount; i++)
         {

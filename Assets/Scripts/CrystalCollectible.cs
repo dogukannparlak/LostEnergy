@@ -5,7 +5,7 @@ public class CrystalCollectible : MonoBehaviour, IInteractable
 {
     [Header("Collection")]
     public int amount = 1;
-    public string promptText = "Topla";
+    public string promptText = "Collect";
 
     [Header("Effects")]
     public AudioClip pickupSfx;
@@ -20,7 +20,7 @@ public class CrystalCollectible : MonoBehaviour, IInteractable
     void Start()
     {
         if (GetComponent<Collider>() == null)
-            Debug.LogWarning($"[CrystalCollectible] '{gameObject.name}' üzerinde Collider yok!", this);
+            Debug.LogWarning($"[CrystalCollectible] '{gameObject.name}' has no Collider!", this);
 
         GameManager gm = GameManager.Instance != null
             ? GameManager.Instance
@@ -43,7 +43,7 @@ public class CrystalCollectible : MonoBehaviour, IInteractable
         if (_collected) return;
         _collected = true;
 
-        // VFX/SFX önce ateşle (transform hâlâ geçerli)
+        // Play effects before hiding the object.
         if (pickupVfxPrefab != null)
         {
             ParticleSystem vfx = Instantiate(pickupVfxPrefab, transform.position, transform.rotation);
@@ -53,7 +53,7 @@ public class CrystalCollectible : MonoBehaviour, IInteractable
         if (pickupSfx != null)
             AudioSource.PlayClipAtPoint(pickupSfx, transform.position, LostEnergy.SettingsManager.GetEffectiveSfxVolume01());
 
-        // Nesneyi gizle (destroy yerine) - GameManager'dan tekrar aktif edilebilir
+        // Hide instead of destroying so it can be respawned later.
         gameObject.SetActive(false);
 
         GameManager gm = GameManager.Instance != null
@@ -63,6 +63,6 @@ public class CrystalCollectible : MonoBehaviour, IInteractable
         if (gm != null)
             gm.AddCrystal(amount);
         else
-            Debug.LogWarning("[CrystalCollectible] GameManager.Instance bulunamadı!", this);
+            Debug.LogWarning("[CrystalCollectible] GameManager.Instance was not found!", this);
     }
 }

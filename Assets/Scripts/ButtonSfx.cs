@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Herhangi bir UI butonuna ekle; tıklandığında ses çalar.
-/// AudioSource gerektirmez, PlayClipAtPoint ile 2D çalar.
+/// Plays a click sound when this UI button is pressed.
+/// Uses PlayClipAtPoint, so no dedicated AudioSource is required.
 /// </summary>
 [RequireComponent(typeof(Button))]
 public class ButtonSfx : MonoBehaviour
 {
-    [Tooltip("Butona basılınca çalacak ses.")]
+    [Tooltip("Sound played when the button is clicked.")]
     public AudioClip clickSfx;
 
     [Range(0f, 1f)]

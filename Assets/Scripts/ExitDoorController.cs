@@ -38,7 +38,7 @@ public class ExitDoorController : MonoBehaviour, IInteractable
             GameManager.RestartGame();
     }
 
-    // ── IInteractable ────────────────────────────────────────
+    // IInteractable
     public string GetPrompt()
     {
         if (IsUnlocked) return "Kapıdan Geç";
@@ -55,7 +55,7 @@ public class ExitDoorController : MonoBehaviour, IInteractable
         ShowWin();
     }
 
-    // ── Kilit ────────────────────────────────────────────────
+    // Unlock state
     void OnTargetReached() => SetUnlocked();
 
     public void SetUnlocked()

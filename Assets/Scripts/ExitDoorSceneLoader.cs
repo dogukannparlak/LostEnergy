@@ -3,9 +3,8 @@ using UnityEngine.SceneManagement;
 using LostEnergy;
 
 /// <summary>
-/// ExitDoorController ile aynı kapı/ışık mantığını taşır; fark olarak
-/// Win paneli göstermek yerine doğrudan sonraki sahneye geçer.
-/// ExitDoor GameObject'inden ExitDoorController'ı kaldırıp bunu ekle.
+/// Uses the same door and light flow as ExitDoorController.
+/// Loads the next scene instead of showing a win panel.
 /// </summary>
 public class ExitDoorSceneLoader : MonoBehaviour, IInteractable
 {
@@ -17,7 +16,7 @@ public class ExitDoorSceneLoader : MonoBehaviour, IInteractable
     public GameObject unlockedLight;
 
     [Header("Scene Transition")]
-    [Tooltip("Geçilecek sahnenin adı (Build Settings'teki isimle aynı olmalı).")]
+    [Tooltip("Name of the scene to load. Must match Build Settings.")]
     public string nextSceneName = "SampleScene2";
 
     public bool IsUnlocked { get; private set; }
@@ -36,7 +35,7 @@ public class ExitDoorSceneLoader : MonoBehaviour, IInteractable
             GameManager.Instance.OnTargetReached -= OnTargetReached;
     }
 
-    // ── IInteractable ─────────────────────────────────────────────────────────
+    // IInteractable
 
     public string GetPrompt()
     {
@@ -54,7 +53,7 @@ public class ExitDoorSceneLoader : MonoBehaviour, IInteractable
         LoadNextScene();
     }
 
-    // ── Kilit ─────────────────────────────────────────────────────────────────
+    // Unlock state
 
     void OnTargetReached() => SetUnlocked();
 
@@ -67,11 +66,11 @@ public class ExitDoorSceneLoader : MonoBehaviour, IInteractable
         if (unlockedLight != null) unlockedLight.SetActive(true);
     }
 
-    // ── Sahne Geçişi ──────────────────────────────────────────────────────────
+    // Scene transition
 
     void LoadNextScene()
     {
-        Time.timeScale   = 1f;   // Donmuş zamanı sıfırla (güvenlik için)
+        Time.timeScale   = 1f;   // Reset time scale before loading.
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;
 

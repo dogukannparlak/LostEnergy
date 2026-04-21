@@ -6,18 +6,18 @@ public class HazardZone : MonoBehaviour
     [Header("Hazard")]
     public float extraDrainPerSecond = 5f;
 
-    [Header("Zone Boyutu")]
+    [Header("Zone Size")]
     public float radius = 3f;
     public float centerY = 1f;
 
-    [Header("Görünüm")]
+    [Header("Visuals")]
     public Color zoneColor = new Color(1f, 0.15f, 0.15f, 0.30f);
 
-    [Header("Ses")]
-    [Tooltip("Oyuncu bölgeye girince döngüyle çalar.")]
+    [Header("Audio")]
+    [Tooltip("Loops while the player is inside the zone.")]
     public AudioClip hazardMusic;
     [Range(0f, 1f)] public float hazardMusicVolume = 0.6f;
-    [Tooltip("AudioMixer'daki SFX veya Music grubunu buraya sürükle.")]
+    [Tooltip("Optional SFX or Music mixer group.")]
     public UnityEngine.Audio.AudioMixerGroup hazardMixerGroup;
 
     private AudioSource _hazardAudio;
@@ -142,16 +142,16 @@ public class HazardZone : MonoBehaviour
                  ?? Shader.Find("Unlit/Color");
         var mat = new Material(sh);
 
-        // URP Transparent surface
-        mat.SetFloat("_Surface", 1f);          // 0=Opaque, 1=Transparent
-        mat.SetFloat("_Blend",   0f);          // 0=Alpha
+        // Configure the material as transparent.
+        mat.SetFloat("_Surface", 1f);          // 0 = Opaque, 1 = Transparent
+        mat.SetFloat("_Blend",   0f);          // 0 = Alpha
         mat.SetFloat("_AlphaClip", 0f);
         mat.SetInt("_SrcBlend",  (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
         mat.SetInt("_DstBlend",  (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
         mat.SetInt("_SrcBlendAlpha", (int)UnityEngine.Rendering.BlendMode.One);
         mat.SetInt("_DstBlendAlpha", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
         mat.SetInt("_ZWrite",    0);
-        mat.SetInt("_Cull",      0);           // render both sides
+        mat.SetInt("_Cull",      0);           // Render both sides.
 
         mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
         mat.DisableKeyword("_ALPHATEST_ON");
@@ -231,7 +231,7 @@ public class HazardZone : MonoBehaviour
 
         if (oxy == null)
             Debug.LogWarning(
-                $"[HazardZone] OxygenSystem bulunamadı! Collider: '{other.gameObject.name}'",
+                $"[HazardZone] OxygenSystem was not found. Collider: '{other.gameObject.name}'",
                 other.gameObject);
 
         return oxy != null;

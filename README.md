@@ -13,17 +13,11 @@
 | Project Version  | 1.0                         |
 | Date             | April 2026                  |
 
-![Figure 1. Lost Energy cover image](image/ChatGPT%20Image%2013%20Nis%202026%2020_39_57.png)
-
-*Figure 1. Main cover artwork created for Lost Energy.*
-
-![Figure 2. Alternative cover design](image/Gemini_Generated_Image_sncx22sncx22sncx.png)
-
-*Figure 2. Alternative cover design supporting the game's atmosphere and narrative tone.*
-
 ---
 
 ## Table of Contents
+
+## Main Cover Art Design
 
 1. [Design History](#1-design-history)
 2. [Game Overview](#2-game-overview)
@@ -42,6 +36,16 @@
 15. [Setup and Installation](#15-setup-and-installation)
 
 ---
+
+## Main Cover Art Design
+
+![Figure 1. Lost Energy cover image](image/ChatGPT%20Image%2013%20Nis%202026%2020_39_57.png)
+
+*Figure 1. Main cover artwork created for Lost Energy.*
+
+![Figure 2. Alternative cover design](image/Gemini_Generated_Image_sncx22sncx22sncx.png)
+
+*Figure 2. Alternative cover design supporting the game's atmosphere and narrative tone.*
 
 ## 1. Design History
 
@@ -162,6 +166,8 @@ Red hazardous surfaces do not merely provide visual variety; they are mechanical
 
 ### Physical World Summary
 
+The following values represent the core physical parameters of the player character. Movement speeds and jump height are configured via the Unity Inspector and may be tuned per scene; the values shown reflect the primary configuration used across gameplay scenes.
+
 | Property        | Value             |
 | --------------- | ----------------- |
 | Perspective     | Third-person (3D) |
@@ -169,6 +175,8 @@ Red hazardous surfaces do not merely provide visual variety; they are mechanical
 | Sprint Speed    | 25 units/s        |
 | Jump Height     | 1.5 units         |
 | Camera Distance | 5 units           |
+
+*Table 1. Core physical movement parameters governing the player character.*
 
 ![Figure 4. Scene 2 general view](image/SampleScene2.png)
 
@@ -193,6 +201,8 @@ The camera system is managed within `PlayerController3P`. The camera orbits arou
 | Pitch Maximum     | +60°   |
 | Camera Distance   | 5 units |
 
+*Table 2. Camera configuration values defined in `PlayerController3P`. Pitch limits prevent the camera from flipping at extreme angles: the −30° floor avoids disorientation on narrow platforms, while the +60° ceiling provides a generous upward view without exposing the empty void above the island. Mouse Sensitivity of 0.2 was tuned to feel responsive without over-rotating on typical mouse hardware.*
+
 ### Control Scheme
 
 | Action                 | Input             |
@@ -203,6 +213,8 @@ The camera system is managed within `PlayerController3P`. The camera orbits arou
 | Interact               | E                 |
 | Camera                 | Mouse             |
 | Pause / Release Cursor | ESC               |
+
+*Table 3. Full player input mapping. All inputs are handled by Unity's new Input System package (`InputSystem_Actions`). The ESC key both pauses gameplay and releases/recaptures the cursor, removing the need for a separate cursor-toggle binding.*
 
 ---
 
@@ -216,6 +228,9 @@ Oxygen is the game's primary resource structure. The player consumes oxygen as l
 | ------- | --------------- | ------------ | ------------------ | ------------- |
 | Scene 1 | 100             | 3 units/s    | +5 units/s         | +5            |
 | Scene 2 | 100             | 3 units/s    | +6 units/s         | +6            |
+| Scene 3 | N/A             | N/A          | N/A                | N/A           |
+
+*Table 4. Per-scene oxygen parameters. Scene 3 has no crystal target and both exit doors are unlocked from the start; however, oxygen drain continues at the same base rate. The only pressure in Stage 3 is selection.*
 
 ### Crystal System
 
@@ -224,6 +239,8 @@ Oxygen is the game's primary resource structure. The player consumes oxygen as l
 - Visual and audio feedback is generated during the collection action.
 - In the first two scenes, the exit door opens once the crystal target is met.
 - In the final scene there is no crystal target; the ending choice is presented directly to the player.
+
+Each collected crystal replenishes **+5 oxygen** (Scene 1) or **+6 oxygen** (Scene 2), capped at the maximum of 100. At the 25-crystal target in Scene 1 the potential total replenishment is 125 oxygen — roughly two full oxygen cycles — which offsets approximately 42 seconds of normal drain. This balance is intentional: the reward is meaningful enough to incentivize collection but never fully eliminates pressure.
 
 ### Hazard Zone System
 
@@ -273,6 +290,8 @@ The game consists of three main scenes. In the first two scenes the player colle
 | NPC            | Guard                                               |
 | Exit           | Scene 2 via `ExitDoorSceneLoader`                 |
 
+*Table 5. Scene 1 layout and objective summary.*
+
 ### Scene 2 – Deteriorated Zone
 
 | Field          | Description                                                        |
@@ -283,6 +302,8 @@ The game consists of three main scenes. In the first two scenes the player colle
 | NPC            | Guard                                                              |
 | Exit           | Scene 3 via `ExitDoorSceneLoader`                                |
 
+*Table 6. Scene 2 layout and objective summary.*
+
 ### Scene 3 – End of Creation
 
 | Field          | Description                                        |
@@ -292,6 +313,8 @@ The game consists of three main scenes. In the first two scenes the player colle
 | Hazards        | Final decision — return or exit choice            |
 | NPC            | Guard                                              |
 | Exit           | Loop end or win screen via `FinalDoorController` |
+
+*Table 7. Scene 3 layout and objective summary. This scene has no crystal requirement; both doors are open from the start.*
 
 ### Game Flow Diagram
 
@@ -319,12 +342,15 @@ Main Menu
 
 ### Player Character
 
-| Property         | Description                                                 |
-| ---------------- | ----------------------------------------------------------- |
-| Model            | Kenney Animated Characters Protagonists                     |
-| Control Setup    | `PlayerController3P` + `CharacterController`            |
-| Primary Goal     | Collect crystals and reach the exit under oxygen management |
-| Death Conditions | Oxygen reaching zero or falling such that `Y < -1`        |
+| Property             | Description                                                                                                                                                                                                                            |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model                | Kenney Animated Characters Protagonists                                                                                                                                                                                                |
+| Control Setup        | `PlayerController3P` + `CharacterController`                                                                                                                                                                                       |
+| Primary Goal         | Collect crystals and reach the exit under oxygen management                                                                                                                                                                            |
+| Death Conditions     | Oxygen reaching zero or falling such that `Y <-1`                                                                                                                                                                                    |
+| Narrative Background | A figure trapped within an unfinished creation whose reason for existing is unclear. Initially reactive and survival-driven — a stranger to the system. By Scene 3, capable of a conscious choice about their place within the cycle. |
+
+*Table 8. Player character properties and narrative role.*
 
 ### NPC – Guard
 
@@ -353,6 +379,8 @@ The Guard is the game's sole narrative-focused NPC. In each scene they greet the
 | Crystal Counter    | Displays collected crystal count in `current / target` format  |
 | Interaction Prompt | Provides contextual information for a nearby interactable object |
 
+*Table 9. HUD components permanently visible during gameplay. All elements update in real time and are managed by `UIManager`.*
+
 ### Panel Structure
 
 | Panel          | Trigger Condition                             |
@@ -363,6 +391,8 @@ The Guard is the game's sole narrative-focused NPC. In each scene they greet the
 | Settings       | Accessed from within the pause menu           |
 | Controls       | Accessed from the main menu or pause menu     |
 | Loading Screen | Opens automatically during scene transitions  |
+
+*Table 10. In-game panel inventory and their activation conditions. All panel states are managed through `UIManager` and `PauseManager`.*
 
 ### Menu Structure
 
@@ -394,6 +424,8 @@ The project uses three primary channels via `GameAudioMixer`.
 | MusicVol  | Background music tracks                             |
 | SFXVol    | In-game effects, dialogue sounds, and hazard alerts |
 
+*Table 11. Audio mixer channel structure. All three channels are exposed as parameters in `GameAudioMixer` and controlled at runtime by `SettingsManager` using logarithmic dB conversion. Volume preferences are persisted via `PlayerPrefs`.*
+
 ### Music Usage
 
 - Different music streams are used for the main menu and gameplay scenes.
@@ -407,6 +439,8 @@ The project uses three primary channels via `GameAudioMixer`.
 | Flowerhead - SomeWhatGood: Lofi | `Observatory and chill 2`                             |
 | Not Jam Music Pack              | `ChillMenu`, `CriticalTheme`, `SwitchWithMeTheme` |
 | Freesound                       | Crystal collection and NPC sound effects                |
+
+*Table 12. Music track sources used across the project's scenes and menus.*
 
 ---
 
@@ -423,12 +457,16 @@ The single-player experience is built on a scene-based structure that is brief b
 | Fast Completion                  | 5–6 minutes   |
 | Exploration and Dialogue Focused | 10–12 minutes |
 
+*Table 13. Estimated completion time by playstyle.*
+
 ### Win and Lose Conditions
 
 | State | Condition                                                        |
 | ----- | ---------------------------------------------------------------- |
 | Win   | Selecting the exit ending via `FinalDoorController` in Scene 3 |
 | Lose  | Oxygen reaching zero or falling out of the scene                 |
+
+*Table 14. Win and lose conditions. There is no partial failure state; any death immediately triggers the respawn flow managed by `RespawnManager`.*
 
 ![Figure 15. Exit door interaction](image/windoorınteractable.png)
 
@@ -444,30 +482,349 @@ The single-player experience is built on a scene-based structure that is brief b
 
 ### Story Summary
 
-Lost Energy follows a character trapped inside an incomplete creation, searching for a way out. The game world is an existence space that cannot fully perform its function; as a result, even oxygen is unstable. The red deterioration zones represent the world's dissolving structure. Crystals function as fragments that have managed to remain intact within this broken order.
+Lost Energy's narrative is delivered almost entirely through three conversations with the Guard — the sole human presence in the game world. Across three encounters the Guard progressively reveals the true nature of the island: it is not a real world but an unfinished creation, abandoned mid-construction by a god who was still learning. The oxygen instability, the red deterioration zones, the void at the island's edges — all are symptoms of an incomplete existence.
+
+The player character arrives without memory or explanation, navigates the fragmenting island, and ultimately reaches a binary choice: step through the exit door and attempt to escape the cycle, or return through the loop door and forget everything once more. The Guard cannot make this journey — he is part of the world, condemned to remember every iteration of the loop while the player perpetually forgets.
+
+Crystals carry a thematic weight beyond their mechanical function: they are described by the Guard as the only "solidly built" fragments within the broken creation — pieces of genuine reality preserved within the decay. Collecting them is not merely a survival act; it is the act of anchoring oneself to what little is real.
 
 ### Thematic Structure
 
-| Element    | Meaning                                              |
-| ---------- | ---------------------------------------------------- |
-| Island     | An incomplete creation                               |
-| Oxygen     | The world's unstable and deficient nature            |
-| Crystals   | Preserved fragments of reality                       |
-| HazardZone | Physical manifestation of deterioration              |
-| Guard      | A witness aware of the system but unable to leave it |
+| Element    | Meaning                                                                 |
+| ---------- | ----------------------------------------------------------------------- |
+| Island     | An unfinished creation abandoned by its creator                         |
+| Oxygen     | The world's fundamental instability made tangible                       |
+| Crystals   | The only solidly built fragments — preserved pieces of genuine reality |
+| HazardZone | Physical manifestation of spreading deterioration                       |
+| Guard      | A witness bound to the system, unable to leave it                       |
+| Loop Door  | The choice to return, forget, and begin again                           |
+| Exit Door  | The choice to confront an uncertain outside                             |
+
+*Table 15. Narrative symbolism mapping each game element to its thematic meaning within the world of Lost Energy.*
 
 ### Scene-by-Scene Narrative Development
 
-| Scene   | Narrative Function                                              |
-| ------- | --------------------------------------------------------------- |
-| Scene 1 | Introduction of world rules and the primary objective           |
-| Scene 2 | Intensification of deterioration and danger                     |
-| Scene 3 | Revelation of the truth and presenting the player with a choice |
+| Scene   | Narrative Function                                                                             |
+| ------- | ---------------------------------------------------------------------------------------------- |
+| Scene 1 | World rules introduced; player as unknowing arrival; god as distant but present force          |
+| Scene 2 | Decay revealed as spreading; god reframed as inexperienced; existential unease escalated       |
+| Scene 3 | Full truth delivered: incomplete creation, loop existence, Guard's limitation, player's choice |
+
+*Table 16. Per-scene narrative delivery functions. Each scene's dialogue builds directly on the previous, forming a three-act revelation structure.*
 
 ### Character Motivations
 
-- The player character tries to survive and find the exit before understanding the world they are in.
-- The Guard serves a guiding function, acting more out of duty than hope.
+- **Player character:** Arrives without explanation and operates on survival instinct for the first two scenes. In Scene 3 they are offered the full truth and must decide whether to act on it or surrender to the loop. They are silent — they cannot speak — which the Guard explicitly acknowledges mid-dialogue in Scene 1.
+- **The Guard:** Locked into his role as a part of the world he describes. He guides out of function, not hope. He remembers every cycle the player has forgotten, and carries the weight of that knowledge alone.
+
+### Full Guard Dialogue
+
+The Guard's dialogue is triggered once per scene via `NPCDialogue` when the player interacts with him. Oxygen consumption is paused for the entire duration. The scripts below document all lines from `DialogueData.json`, `DialogueData2.json`, and `DialogueData3.json`, organized into narrative beats. Beat labels are documentation groupings — they are not tagged in the asset files.
+
+---
+
+#### Scene 1 – Island Entrance (`DialogueData.json`)
+
+**Narrative function:** Introduce the player to the world's rules, the oxygen system, crystals as exit tickets, and the island's boundary. Close with the first hint of the world's deeper philosophical nature.
+
+**Beat 1 — The Guard stops the player**
+
+| # | Turkish                                         | English                                                |
+| - | ----------------------------------------------- | ------------------------------------------------------ |
+| 1 | Dur!                                            | Stop!                                                  |
+| 2 | Gitmeden önce bilmen gereken birkaç şey var. | There are a few things you need to know before you go. |
+
+**Beat 2 — Existential ambivalence about the player's presence**
+
+| # | Turkish                          | English                           |
+| - | -------------------------------- | --------------------------------- |
+| 3 | Buraya nasıl geldin bilmiyorum. | I don't know how you got here.    |
+| 4 | Neden geldin onu da bilmiyorum.  | I don't know why you came either. |
+| 5 | Açıkçası umurumda da değil. | Frankly, I don't care.            |
+| 6 | Ama gelmişsen...                | But if you came here...           |
+| 7 | Tanrının bir bildiği vardır. | God must know something.          |
+
+**Beat 3 — Mission: deliver the briefing**
+
+| # | Turkish                                      | English                                       |
+| - | -------------------------------------------- | --------------------------------------------- |
+| 8 | Benim görevim, bilmen gerekenleri anlatmak. | My duty is to tell you what you need to know. |
+
+**Beat 4 — The island and the void**
+
+| #  | Turkish                                        | English                                                    |
+| -- | ---------------------------------------------- | ---------------------------------------------------------- |
+| 9  | İlk olarak...                                 | First of all...                                            |
+| 10 | Hiçliğin ortasında süzülen bir adadayız. | We are on an island floating in the middle of nothingness. |
+| 11 | Ormanların içine girmeni pek tavsiye etmem.  | I don't recommend going into the forests.                  |
+| 12 | Ada sınırına fazla yaklaşırsan...         | If you get too close to the island's edge...               |
+| 13 | Hiçliğe düşersin.                          | You'll fall into the void.                                 |
+
+**Beat 5 — Oxygen bar tutorial**
+
+| #  | Turkish                                 | English                                    |
+| -- | --------------------------------------- | ------------------------------------------ |
+| 14 | Şimdi asıl konuya gelelim.            | Now let's get to the main point.           |
+| 15 | Kafanın üstünde gördüğün şey... | What you see above your head...            |
+| 16 | O bir oksijen barı.                    | That's an oxygen bar.                      |
+| 17 | Bitmesini isteyeceğini sanmıyorum.    | I don't think you'd want it to run out.    |
+| 18 | Ama denemek istersen...                 | But if you want to try...                  |
+| 19 | Sonuçlarını ben de merak ediyorum.   | I'm curious about the consequences myself. |
+
+**Beat 6 — Navigation**
+
+| #  | Turkish                                   | English                                     |
+| -- | ----------------------------------------- | ------------------------------------------- |
+| 20 | Çıkışa gidene kadar okları takip et. | Follow the arrows until you reach the exit. |
+
+**Beat 7 — Crystal tutorial**
+
+| #  | Turkish                           | English                               |
+| -- | --------------------------------- | ------------------------------------- |
+| 21 | Kristalleri toplamayı da unutma. | Don't forget to collect the crystals. |
+| 22 | Onlar senin çıkış biletin.    | They are your exit ticket.            |
+| 23 | Biraz da can verirler.            | They'll give you a little life too.   |
+
+**Beat 8 — Creator's nature (first hint)**
+
+| #  | Turkish                               | English                      |
+| -- | ------------------------------------- | ---------------------------- |
+| 24 | Tanrımızın garip huyları vardır. | Our god has strange habits.  |
+| 25 | Ama bazen insaflıdır.               | But sometimes he's merciful. |
+
+**Beat 9 — The player cannot speak**
+
+| #  | Turkish                             | English                             |
+| -- | ----------------------------------- | ----------------------------------- |
+| 26 | Ee...                               | Well...                             |
+| 27 | Sormak istediğin bir şey var mı? | Is there something you want to ask? |
+| 28 | ...                                 | ...                                 |
+| 29 | Ah...                               | Ah...                               |
+| 30 | Siz konuşamıyorsunuz.             | You can't speak.                    |
+| 31 | Unutuyorum bazen.                   | I forget sometimes.                 |
+
+**Beat 10 — Shared nature (existential close)**
+
+| #  | Turkish                              | English                             |
+| -- | ------------------------------------ | ----------------------------------- |
+| 32 | Bizim tek farkımız...              | Our only difference...              |
+| 33 | Biraz daha fazla farkında olmamız. | is that we're a little more aware.  |
+| 34 | Ama sonuçta...                      | But in the end...                   |
+| 35 | Aynı yerin parçalarıyız.         | we are all parts of the same place. |
+
+**Closing**
+
+| #  | Turkish                                 | English                          |
+| -- | --------------------------------------- | -------------------------------- |
+| 36 | İleride daha çok şey öğreneceksin. | You will learn much more ahead.  |
+| 37 | Dediklerimi unutma.                     | Don't forget what I've told you. |
+| 38 | Bol şans, yabancı.                    | Good luck, stranger.             |
+
+---
+
+#### Scene 2 – Deteriorated Zone (`DialogueData2.json`)
+
+**Narrative function:** Acknowledge the player's progress; explain hazard zones as corrupted areas; reframe the god as a new, inexperienced creator causing involuntary damage; escalate existential unease.
+
+**Beat 1 — Recognition**
+
+| # | Turkish                        | English                         |
+| - | ------------------------------ | ------------------------------- |
+| 1 | Hey...                         | Hey...                          |
+| 2 | Yine sen.                      | It's you again.                 |
+| 3 | Buraya kadar gelebildin demek. | So you managed to get this far. |
+| 4 | İlk aşamayı geçtin.        | You passed the first stage.     |
+
+**Beat 2 — Omitted warning**
+
+| # | Turkish                                   | English                                   |
+| - | ----------------------------------------- | ----------------------------------------- |
+| 5 | Sana geçen sefer söylemeyi unutmuştum. | I forgot to tell you something last time. |
+| 6 | Ama fark etmişsindir.                    | But you must have noticed.                |
+
+**Beat 3 — Hazard zones explained**
+
+| #  | Turkish                                         | English                                      |
+| -- | ----------------------------------------------- | -------------------------------------------- |
+| 7  | Bazı bölgelerde oksijen daha hızlı bitiyor. | Oxygen runs out faster in some areas.        |
+| 8  | Neden mi?                                       | Why?                                         |
+| 9  | Çünkü bu yer... düzgün çalışmıyor.     | Because this place... doesn't work properly. |
+| 10 | Fark ettiysen, zemin de kırmızı.             | If you noticed, the floor is also red.       |
+| 11 | Bu iyiye işaret değil.                        | That's not a good sign.                      |
+| 12 | Oralar daha çok bozulmuş alanlar.             | Those are more corrupted areas.              |
+
+**Beat 4 — God's experiments spreading the decay**
+
+| #  | Turkish                                            | English                                 |
+| -- | -------------------------------------------------- | --------------------------------------- |
+| 13 | Tanrı yine bir şeyler denerken...                | While God was trying things again...    |
+| 14 | Bir şeyleri bozmuş.                              | He broke something.                     |
+| 15 | Fark etmişsindir...                               | You must have noticed...                |
+| 16 | Şimdi de alanlar büyümüş.                     | Now the areas have grown too.           |
+| 17 | Bu da bozulmanın yayıldığı anlamına geliyor. | This means the corruption is spreading. |
+
+**Beat 5 — Warning**
+
+| #  | Turkish      | English     |
+| -- | ------------ | ----------- |
+| 18 | Dikkatli ol. | Be careful. |
+
+**Beat 6 — Remaining rules unchanged**
+
+| #  | Turkish                   | English                    |
+| -- | ------------------------- | -------------------------- |
+| 19 | Geri kalan şeyler aynı. | The rest remains the same. |
+| 20 | Hızlı ol.               | Be quick.                  |
+| 21 | Kristalleri topla.        | Collect the crystals.      |
+| 22 | Kapıya ulaş.            | Reach the door.            |
+
+**Beat 7 — Unstable world, ominous luck wish**
+
+| #  | Turkish                             | English                        |
+| -- | ----------------------------------- | ------------------------------ |
+| 23 | Bol şans.                          | Good luck.                     |
+| 24 | Bu bölgede buna ihtiyacın olacak. | You'll need it in this area.   |
+| 25 | Bu ada...                           | This island...                 |
+| 26 | Hiç stabil sayılmaz.              | Can't be called stable at all. |
+
+**Beat 8 — God as a newborn creator**
+
+| #  | Turkish                               | English                              |
+| -- | ------------------------------------- | ------------------------------------ |
+| 27 | Neyse...                              | Anyway...                            |
+| 28 | Fazla konuşmayayım.                 | I shouldn't talk too much.           |
+| 29 | Sağı solu belli olmuyor.            | Nothing is predictable anymore.      |
+| 30 | Galiba bu evrende yeni.               | He seems to be new to this universe. |
+| 31 | Her şeyi öğrenmeye çalışıyor.  | Trying to learn everything.          |
+| 32 | Tıpkı yeni doğmuş bir bebek gibi. | Just like a newborn baby.            |
+| 33 | Bu yüzden bu anomaliler.             | That's why these anomalies.          |
+
+**Beat 9 — Uncertain farewell**
+
+| #  | Turkish                  | English                          |
+| -- | ------------------------ | -------------------------------- |
+| 34 | Neyse...                 | Anyway...                        |
+| 35 | Bu bölgeyi geçersen... | If you pass through this area... |
+| 36 | Yine karşılaşırız.  | We'll meet again.                |
+| 37 | Tabii...                 | Of course...                     |
+| 38 | Orası da varsa.         | If that place still exists.      |
+
+**Closing**
+
+| #  | Turkish              | English                    |
+| -- | -------------------- | -------------------------- |
+| 39 | Görüşmek üzere.  | Until we meet again.       |
+| 40 | Güç seninle olsun. | May the force be with you. |
+| 41 | İhtiyacın olacak.  | You'll need it.            |
+
+---
+
+#### Scene 3 – End of Creation (`DialogueData3.json`)
+
+**Narrative function:** Deliver the complete truth — the world is an unfinished creation; crystals are fragments of reality; the loop is real; the Guard cannot leave; the player has a choice.
+
+**Beat 1 — Arrival acknowledged**
+
+| # | Turkish                       | English                |
+| - | ----------------------------- | ---------------------- |
+| 1 | Ah...                         | Ah...                  |
+| 2 | Sonunda geldin.               | You finally made it.   |
+| 3 | Buraya kadar gelen pek olmaz. | Not many get this far. |
+
+**Beat 2 — Truth begins**
+
+| # | Turkish                      | English                       |
+| - | ---------------------------- | ----------------------------- |
+| 4 | Şimdi...                    | Now...                        |
+| 5 | Gerçeği öğrenme zamanı. | It's time to learn the truth. |
+
+**Beat 3 — The world is unfinished**
+
+| #  | Turkish                                           | English                                                      |
+| -- | ------------------------------------------------- | ------------------------------------------------------------ |
+| 6  | Burası bir dünya değil.                        | This is not a world.                                         |
+| 7  | Yarım kalmış bir yaratım.                     | An unfinished creation.                                      |
+| 8  | Tanrının denemesi.                              | God's experiment.                                            |
+| 9  | Ama tamamlanamamış.                             | But it was never completed.                                  |
+| 10 | O yüzden her şey bozuk, çirkin ve orantısız. | That's why everything is broken, ugly, and disproportionate. |
+| 11 | O yüzden oksijen azalıyor.                      | That's why oxygen diminishes.                                |
+| 12 | O yüzden hiçlik var.                            | That's why the void exists.                                  |
+| 13 | Bu yer silinmedi.                                 | This place was not deleted.                                  |
+| 14 | Ama düzeltilmedi de.                             | But it wasn't fixed either.                                  |
+| 15 | Sadece bırakıldı.                              | It was simply left behind.                                   |
+
+**Beat 4 — Crystals redefined as fragments of reality**
+
+| #  | Turkish                                                   | English                                              |
+| -- | --------------------------------------------------------- | ---------------------------------------------------- |
+| 16 | Kristaller...                                             | Crystals...                                          |
+| 17 | Onlar bu yerin sağlam inşa edilmiş yegane parçaları. | They are the only solidly built parts of this place. |
+| 18 | Gerçekliğin kırıntıları.                            | Fragments of reality.                                |
+| 19 | Topladıkça...                                           | As you collect them...                               |
+| 20 | Buradan koparsın.                                        | You detach from this place.                          |
+| 21 | Ve belki çıkarsın.                                     | And perhaps you escape.                              |
+
+**Beat 5 — Doubt about the exit**
+
+| #  | Turkish                  | English                     |
+| -- | ------------------------ | --------------------------- |
+| 22 | Ama çıkış...         | But the exit...             |
+| 23 | Gerçek mi bilmiyorum.   | I don't know if it's real.  |
+| 24 | Belki başka bir deneme. | Perhaps another experiment. |
+
+**Beat 6 — Staying means decay**
+
+| #  | Turkish              | English                |
+| -- | -------------------- | ---------------------- |
+| 25 | Ama burada kalmak... | But staying here...    |
+| 26 | Onu biliyorum.       | That I know.           |
+| 27 | Burası çürüyor.  | This place is rotting. |
+
+**Beat 7 — The loop revealed**
+
+| #  | Turkish                        | English                    |
+| -- | ------------------------------ | -------------------------- |
+| 28 | Ve evet...                     | And yes...                 |
+| 29 | Bu bir döngü.                | This is a loop.            |
+| 30 | Sen daha önce de buradaydın. | You have been here before. |
+| 31 | Ama hatırlamıyorsun.         | But you don't remember.    |
+| 32 | Ben hatırlıyorum.            | I remember.                |
+
+**Beat 8 — The Guard's nature revealed**
+
+| #  | Turkish                     | English                  |
+| -- | --------------------------- | ------------------------ |
+| 33 | Ben çıkamıyorum.         | I cannot leave.          |
+| 34 | Ben bu yerin parçasıyım. | I am part of this place. |
+| 35 | Ama sen...                  | But you...               |
+| 36 | Henüz değilsin.           | Not yet.                 |
+
+**Beat 9 — The binary choice**
+
+| #  | Turkish       | English            |
+| -- | ------------- | ------------------ |
+| 37 | Seçimin var. | You have a choice. |
+| 38 | Devam et.     | Continue.          |
+| 39 | Ya da kal.    | Or stay.           |
+| 40 | Ve unut.      | And forget.        |
+| 41 | ...           | ...                |
+
+**Beat 10 — The doors pointed out**
+
+| #  | Turkish         | English              |
+| -- | --------------- | -------------------- |
+| 42 | Kapılar orada. | The doors are there. |
+
+**Closing**
+
+| #  | Turkish                               | English                          |
+| -- | ------------------------------------- | -------------------------------- |
+| 43 | Bu sefer son olabilir.                | This time could be the end.      |
+| 44 | Ya da sadece başka bir başlangıç. | Or just another beginning.       |
+| 45 | Bol şans.                            | Good luck.                       |
+| 46 | Bu defa gerçekten ihtiyacın olacak. | This time you'll really need it. |
+
+*Table 17. Full Guard dialogue scripts for all three scenes. Original Turkish text with English translation. Beat groupings are documentation labels — they are not tagged in the `DialogueData` ScriptableObject assets. Delivered via `NPCDialogue` + `DialogueManager`; oxygen drain is paused for the full duration of each conversation.*
 
 ---
 
@@ -498,12 +855,14 @@ LostEnergy Namespace
 | `PauseManager`         | Pause flow and panel management                      |
 | `LoadingScreenManager` | Asynchronous scene loading and loading screen        |
 
+*Table 18. Core script inventory and their primary responsibilities. Scripts communicate through C# events (`UnityAction`, `Action<T>`) rather than direct references, keeping coupling low.*
+
 ### Technical Decisions
 
-- Game logic is managed through modular script structures.
-- `MusicManager` uses the `DontDestroyOnLoad` approach for cross-scene persistence.
-- `SettingsManager` stores audio settings with `PlayerPrefs`.
-- References are cached at the `Start()` phase to reduce cost inside `Update()`.
+- **Modular script structure**: Each system (oxygen, crystals, hazards, dialogue) is encapsulated in its own script and communicates via C# events. This makes individual systems independently testable and allows `DialogueManager` to pause `OxygenSystem` without any coupling to `GameManager`.
+- **`MusicManager` uses `DontDestroyOnLoad`**: This prevents music from restarting or cutting out during asynchronous scene loading. The alternative — restarting music from `Awake()` in each scene — was evaluated but produced an audible silence gap during transitions that broke immersion.
+- **`SettingsManager` uses `PlayerPrefs`**: Volume preferences persist between play sessions without requiring a save file. A `ScriptableObject`-based approach was considered but rejected as unnecessarily complex for three simple float values.
+- **References cached in `Start()`**: Components are located once at initialization and stored in private fields. Calling `GetComponent<T>()` every frame inside `Update()` at 60 fps would add unnecessary overhead across all active scripts.
 
 ### Performance Notes
 
@@ -525,6 +884,8 @@ LostEnergy Namespace
 | Freesound effects               | Per-file CC license                              |
 | Unity built-in packages         | Unity Asset Store EULA / Unity Companion License |
 
+*Table 19. High-level license summary by asset source group.*
+
 ### Kenney Assets
 
 All Kenney assets are published under the [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) license.
@@ -537,12 +898,16 @@ All Kenney assets are published under the [CC0 1.0 Universal](https://creativeco
 | Nature Kit                       | 2.1     | https://kenney.nl/assets/nature-kit          |
 | Platformer Kit                   | 4.1     | https://kenney.nl/assets/platformer-kit      |
 
+*Table 20. Kenney asset packs used in the project. All are published under CC0 1.0 Universal — no attribution required.*
+
 ### Unity Asset Store Assets
 
 | Asset Pack       | Publisher | Version |
 | ---------------- | --------- | ------- |
 | Stylized Crystal | LowlyPoly | 1.0     |
 | Stylized door    | lowpoly89 | 1.0     |
+
+*Table 21. Unity Asset Store assets used in the project.*
 
 License: [Unity Asset Store End User License Agreement](https://unity.com/legal/as-terms)
 
@@ -557,6 +922,8 @@ License: [Unity Asset Store End User License Agreement](https://unity.com/legal/
 | SwitchWithMeTheme.wav               | https://not-jam.itch.io/not-jam-music-pack          | CC0 1.0                           |
 | Observatory and chill 2.wav         | https://flowerheadmusic.itch.io/somewhat-good-lofi  | Royalty free (author declaration) |
 
+*Table 22. Individual audio and music file sources. Files obtained from Freesound require per-file license verification; CC BY files require written attribution.*
+
 ### Unity Built-in Packages
 
 | Package               | Publisher          | License                 |
@@ -564,6 +931,8 @@ License: [Unity Asset Store End User License Agreement](https://unity.com/legal/
 | TextMesh Pro          | Unity Technologies | Unity Asset Store EULA  |
 | Input System          | Unity Technologies | Unity Companion License |
 | Post Processing Stack | Unity Technologies | Unity Companion License |
+
+*Table 23. Unity built-in packages included via the Package Manager.*
 
 ### Usage Notes
 
@@ -583,12 +952,16 @@ License: [Unity Asset Store End User License Agreement](https://unity.com/legal/
 
 ### Minimum System Requirements
 
-- Operating System: Windows 10 64-bit
-- Processor: Intel Core i3 class or equivalent
-- Memory: 4 GB RAM
-- Graphics: DirectX 11 compatible graphics card
-- Storage: At least 1 GB free space
-- Resolution: 1280 x 720
+| Requirement | Minimum Specification             |
+| ----------- | --------------------------------- |
+| OS          | Windows 10 64-bit                 |
+| Processor   | Intel Core i3 class or equivalent |
+| Memory      | 4 GB RAM                          |
+| Graphics    | DirectX 11 compatible GPU         |
+| Storage     | At least 1 GB free space          |
+| Resolution  | 1280 × 720                       |
+
+*Table 24. Minimum system requirements for running the compiled Windows build.*
 
 ### Build Steps
 
