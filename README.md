@@ -213,6 +213,8 @@ The camera system is managed within `PlayerController3P`. The camera orbits arou
 | Interact               | E                 |
 | Camera                 | Mouse             |
 | Pause / Release Cursor | ESC               |
+| Skip                   | Tab               |
+| Interact Npc           | Space             |
 
 *Table 3. Full player input mapping. All inputs are handled by Unity's new Input System package (`InputSystem_Actions`). The ESC key both pauses gameplay and releases/recaptures the cursor, removing the need for a separate cursor-toggle binding.*
 
@@ -361,6 +363,7 @@ The Guard is the game's sole narrative-focused NPC. In each scene they greet the
 - Managed via the `NPCDialogue` and `DialogueData` structures.
 - Oxygen consumption is paused while dialogue is active.
 - Dialogue simultaneously delivers system tutorials and story content to the player.
+- During dialogue, [Space] advances to the next line (or closes the panel if on the last line), and [Tab] skips the entire conversation instantly. Prompt text for these keys is shown at the bottom of the dialogue panel.
 
 ![Figure 11. Dialogue with the Guard](image/dialoguepanel.png)
 
@@ -838,7 +841,8 @@ LostEnergy Namespace
 ├── MusicManager
 ├── SettingsManager
 ├── SceneLoader
-└── UIManager
+├── UIManager
+└── GameLogger
 ```
 
 ### Core Scripts
@@ -854,8 +858,47 @@ LostEnergy Namespace
 | `RespawnManager`       | Position reset after death                           |
 | `PauseManager`         | Pause flow and panel management                      |
 | `LoadingScreenManager` | Asynchronous scene loading and loading screen        |
+| `GameLogger`           | File-based session event logger                      |
 
 *Table 18. Core script inventory and their primary responsibilities. Scripts communicate through C# events (`UnityAction`, `Action<T>`) rather than direct references, keeping coupling low.*
+
+### Log System
+
+`GameLogger` is a singleton logger that is auto-spawned via `RuntimeInitializeOnLoadMethod` before any scene loads. It persists across all scene transitions using `DontDestroyOnLoad` and requires no manual GameObject placement.
+
+Each session creates a new timestamped log file. A header block is written at startup containing the session timestamp, application version, platform, and Unity version.
+
+**Log file location:**
+
+| Environment | Path                                                            |
+| ----------- | --------------------------------------------------------------- |
+| Editor      | `<ProjectRoot>/Logs/Sessions/session_yyyy-MM-dd_HH-mm-ss.log` |
+| Build       | `<BuildFolder>/Logs/session_yyyy-MM-dd_HH-mm-ss.log`          |
+
+**Log line format:**
+
+```text
+[yyyy-MM-dd HH:mm:ss] | EVENT_TYPE | detail
+```
+
+**Logged event types:**
+
+| Event Type     | Source Script(s)                                               | Detail Example                                         |
+| -------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
+| `CRYSTAL`    | `CrystalCollectible`                                         | `3/25 \| Scene: SampleScene \| Pos: (12.0, 1.0, -4.5)` |
+| `DEATH`      | `OxygenSystem`                                               | `Oxygen depleted`                                    |
+| `SCENE_LOAD` | `ExitDoorSceneLoader`, `PauseManager`, `MainMenuManager` | `SampleScene2`                                       |
+| `INTERACT`   | `PlayerInteraction`                                          | Target object name                                     |
+| `PAUSE`      | `PauseManager`                                               | `Game paused`                                        |
+| `RESUME`     | `PauseManager`                                               | `Game resumed`                                       |
+| `RESTART`    | `GameOverRestartButton`, `RestartButton`                   | `Restarted after game over`                          |
+| `UI`         | `PauseManager`, `MainMenuManager`                          | `Settings opened`                                    |
+| `SETTINGS`   | `SettingsManager`                                            | `MusicVol increased: 0.50 → 0.80`                   |
+| `MUTE`       | `SettingsManager`                                            | `Muted` / `Unmuted`                                |
+| `BUTTON`     | `ButtonSfx`                                                  | GameObject name of the clicked button                  |
+| `QUIT`       | `MainMenuManager`                                            | `Application quit`                                   |
+
+*Table 18.1 - GameLogger event types, their source scripts, and example detail strings.*
 
 ### Technical Decisions
 
@@ -863,6 +906,7 @@ LostEnergy Namespace
 - **`MusicManager` uses `DontDestroyOnLoad`**: This prevents music from restarting or cutting out during asynchronous scene loading. The alternative — restarting music from `Awake()` in each scene — was evaluated but produced an audible silence gap during transitions that broke immersion.
 - **`SettingsManager` uses `PlayerPrefs`**: Volume preferences persist between play sessions without requiring a save file. A `ScriptableObject`-based approach was considered but rejected as unnecessarily complex for three simple float values.
 - **References cached in `Start()`**: Components are located once at initialization and stored in private fields. Calling `GetComponent<T>()` every frame inside `Update()` at 60 fps would add unnecessary overhead across all active scripts.
+- **`GameLogger` uses `RuntimeInitializeOnLoadMethod`**: The logger is spawned automatically before the first scene loads, eliminating the need to place it manually in every scene. File writes are guarded with a `lock` to prevent race conditions if multiple events fire on the same frame.
 
 ### Performance Notes
 

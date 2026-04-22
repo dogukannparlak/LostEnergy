@@ -261,7 +261,7 @@ Kristal toplama -> Oksijen yenileme -> Daha uzun süre hayatta kalma
 
 ### Genel Akış
 
-Oyun üç ana sahneden oluşur. İlk iki sahnede oyuncu belirli sayıda kristal toplar; üçüncü sahnede ise final seçimiyle deneyim sonlandırılır veya döngüye alınır.
+Oyun üç ana sahnenin oluşur. İlk iki sahnede oyuncu belirli sayıda kristal toplar; üçüncü sahnede ise final seçimiyle deneyim sonlandırılır veya döngüye alınır.
 
 ### Sahne 1 - Adanın Girişi
 
@@ -481,7 +481,8 @@ LostEnergy Namespace
 ├── MusicManager
 ├── SettingsManager
 ├── SceneLoader
-└── UIManager
+├── UIManager
+└── GameLogger
 ```
 
 ### Temel Scriptler
@@ -497,6 +498,45 @@ LostEnergy Namespace
 | `RespawnManager`       | Ölüm sonrası konum sıfırlama                    |
 | `PauseManager`         | Duraklatma akışı ve panel yönetimi               |
 | `LoadingScreenManager` | Asenkron sahne yükleme ve yükleme ekranı          |
+| `GameLogger`           | Dosya tabanlı oturum olay kaydedicisi               |
+
+### Log Sistemi
+
+`GameLogger`, herhangi bir sahne yüklenmeden önce `RuntimeInitializeOnLoadMethod` aracılığıyla otomatik olarak oluşturulan bir singleton kaydedicidir. `DontDestroyOnLoad` ile tüm sahne geçişlerinde varlığını sürdürür; sahneye manuel olarak yerleştirme gerektirmez.
+
+Her oturum için zaman damgalı yeni bir log dosyası oluşturulur. Başlangıçta oturum zaman damgası, uygulama sürümü, platform ve Unity sürümü içeren bir başlık bloğu yazılır.
+
+**Log dosyası konumu:**
+
+| Ortam       | Yol |
+| ----------- | --- |
+| Editör      | `<ProjectRoot>/Logs/Sessions/session_yyyy-MM-dd_HH-mm-ss.log` |
+| Build       | `<BuildFolder>/Logs/session_yyyy-MM-dd_HH-mm-ss.log` |
+
+**Log satırı biçimi:**
+
+```text
+[yyyy-MM-dd HH:mm:ss] | OLAY_TIPI | detay
+```
+
+**Kaydedilen olay tipleri:**
+
+| Olay Tipi    | Kaynak Script(ler)                                      | Detay Örneği                                        |
+| ------------ | ------------------------------------------------------- | --------------------------------------------------- |
+| `CRYSTAL`    | `CrystalCollectible`                                  | `3/25 \| Scene: SampleScene \| Pos: (12.0, 1.0, -4.5)` |
+| `DEATH`      | `OxygenSystem`                                        | `Oxygen depleted`                                   |
+| `SCENE_LOAD` | `ExitDoorSceneLoader`, `PauseManager`, `MainMenuManager` | `SampleScene2`                                   |
+| `INTERACT`   | `PlayerInteraction`                                   | Etkileşilen nesnenin adı                           |
+| `PAUSE`      | `PauseManager`                                        | `Game paused`                                       |
+| `RESUME`     | `PauseManager`                                        | `Game resumed`                                      |
+| `RESTART`    | `GameOverRestartButton`, `RestartButton`               | `Restarted after game over`                         |
+| `UI`         | `PauseManager`, `MainMenuManager`                     | `Settings opened`                                   |
+| `SETTINGS`   | `SettingsManager`                                     | `MusicVol increased: 0.50 → 0.80`                 |
+| `MUTE`       | `SettingsManager`                                     | `Muted` / `Unmuted`                                 |
+| `BUTTON`     | `ButtonSfx`                                           | Tıklanan butonun GameObject adı                     |
+| `QUIT`       | `MainMenuManager`                                     | `Application quit`                                  |
+
+*Tablo 18b. GameLogger olay tipleri, kaynak scriptleri ve örnek detay string'leri.*
 
 ### Teknik Kararlar
 
@@ -504,6 +544,7 @@ LostEnergy Namespace
 - `MusicManager` sahneler arası kalıcılık için `DontDestroyOnLoad` yaklaşımını kullanır.
 - `SettingsManager`, ses ayarlarını `PlayerPrefs` ile saklar.
 - Referans erişimleri `Start()` aşamasında önbelleğe alınarak `Update()` içindeki maliyet azaltılır.
+- **`GameLogger`, `RuntimeInitializeOnLoadMethod` kullanır**: Kaydedici, ilk sahne yüklenmeden önce otomatik olarak oluşturulur; bu sayede her sahneye manuel yerleştirme gerekmez. Dosya yazma işlemleri, aynı karede birden fazla olay tetiklenirse yarış koşullarını önlemek amacıyla `lock` ile korunur.
 
 ### Performans Notları
 
@@ -616,3 +657,9 @@ E           -> Etkileşim / Kristal Toplama
 Fare        -> Kamera
 ESC         -> Duraklatma Menüsü
 ```
+
+---
+
+## 16. Diyalog Sistemi
+
+- Diyalog sırasında [Space] bir sonraki satıra geçer (veya son satırdaysa paneli kapatır), [Tab] ise tüm diyaloğu anında atlar. Bu tuşlar için açıklama metni diyalog panelinin altında gösterilir.
