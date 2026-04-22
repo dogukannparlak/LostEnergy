@@ -666,8 +666,9 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 228983314963061720, guid: a57078ad7afa9ec4d9f38b89e83451c3, type: 3}
       propertyPath: m_text
-      value: " \u2192  Hareket\n \u2192  Kamera\n \u2192  Z\u0131pla\n \u2192  Etkile\u015Fim
-        / Kap\u0131 A\xE7\n \u2192  Pause Men\xFCs\xFC-Geri"
+      value: " \u2192  Hareket\n \u2192  Kamera\n \u2192 Z\u0131pla / Diyalo\u011Fu
+        \u0130lerlet\n \u2192  Etkile\u015Fim / Kap\u0131 A\xE7\n \u2192  Pause Men\xFCs\xFC-Geri\n
+        \u2192 Diyalo\u011Fu Atla"
       objectReference: {fileID: 0}
     - target: {fileID: 228983314963061720, guid: a57078ad7afa9ec4d9f38b89e83451c3, type: 3}
       propertyPath: m_VerticalAlignment
@@ -924,7 +925,7 @@ PrefabInstance:
     - target: {fileID: 4609831473807174934, guid: a57078ad7afa9ec4d9f38b89e83451c3, type: 3}
       propertyPath: m_text
       value: "WASD / Ok Tu\u015Flar\u0131   \nMouse                     \nSPACE                 
-        \nE              \nESC        "
+        \nE              \nESC\nTAB        "
       objectReference: {fileID: 0}
     - target: {fileID: 4609831473807174934, guid: a57078ad7afa9ec4d9f38b89e83451c3, type: 3}
       propertyPath: m_margin.w
@@ -1088,7 +1089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8737455904499000751, guid: a57078ad7afa9ec4d9f38b89e83451c3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8834844653346251193, guid: a57078ad7afa9ec4d9f38b89e83451c3, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1128,7 +1129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9058045250850593875, guid: a57078ad7afa9ec4d9f38b89e83451c3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

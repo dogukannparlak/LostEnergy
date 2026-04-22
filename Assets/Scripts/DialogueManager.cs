@@ -17,10 +17,6 @@ public class DialogueManager : MonoBehaviour
     [Header("Settings")]
     public float oxygenResumeDelay = 2f;
 
-    [Header("Input")]
-    [Tooltip("Seconds the key must be held to advance dialogue.")]
-    public float holdDuration = 0.5f;
-
     [Header("Audio")]
     [Tooltip("Plays when the dialogue starts.")]
     public AudioClip dialogueStartSfx;
@@ -34,7 +30,6 @@ public class DialogueManager : MonoBehaviour
     private DialogueData _current;
     private int _index;
     private OxygenSystem _oxygenSystem;
-    private float _holdTimer = 0f;
 
     public bool IsActive { get; private set; }
 
@@ -81,20 +76,9 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // Space: hold for holdDuration seconds to advance.
-        if (Keyboard.current.spaceKey.isPressed)
-        {
-            _holdTimer += Time.deltaTime;
-            if (_holdTimer >= holdDuration)
-            {
-                _holdTimer = 0f;
-                NextLine();
-            }
-        }
-        else
-        {
-            _holdTimer = 0f;
-        }
+        // Space: single press to advance.
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            NextLine();
     }
 
     void SkipDialogue()
@@ -110,7 +94,7 @@ public class DialogueManager : MonoBehaviour
         lineText.text = line.text;
         bool isLast = (_index == _current.lines.Length - 1);
         if (continueHintText != null)
-            continueHintText.text = isLast ? "[Space Tut] Kapat  |  [Tab] Atla" : "[Space Tut] ›  |  [Tab] Atla";
+            continueHintText.text = isLast ? "[Space] Kapat  |  [Tab] Atla" : "[Space] ›  |  [Tab] Atla";
     }
 
     void NextLine()
