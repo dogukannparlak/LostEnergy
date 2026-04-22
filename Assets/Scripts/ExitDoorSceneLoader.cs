@@ -70,7 +70,8 @@ public class ExitDoorSceneLoader : MonoBehaviour, IInteractable
 
     void LoadNextScene()
     {
-        Time.timeScale   = 1f;   // Reset time scale before loading.
+        LostEnergy.GameLogger.Instance?.LogEvent("SCENE_LOAD", nextSceneName);
+        Time.timeScale   = 1f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;
 

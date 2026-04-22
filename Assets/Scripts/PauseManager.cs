@@ -79,6 +79,8 @@ namespace LostEnergy
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            GameLogger.Instance?.LogEvent("RESUME", "Game resumed");
         }
 
         private void PauseGame()
@@ -89,6 +91,8 @@ namespace LostEnergy
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            GameLogger.Instance?.LogEvent("PAUSE", "Game paused");
         }
 
         public void ShowSettings()
@@ -96,24 +100,32 @@ namespace LostEnergy
             SettingsManager.RefreshAllFromSaved();
             if (pausePanel != null) pausePanel.SetActive(false);
             if (settingsPanel != null) settingsPanel.SetActive(true);
+
+            GameLogger.Instance?.LogEvent("UI", "Settings opened");
         }
 
         public void HideSettings()
         {
             if (settingsPanel != null) settingsPanel.SetActive(false);
             if (pausePanel != null) pausePanel.SetActive(true);
+
+            GameLogger.Instance?.LogEvent("UI", "Settings closed");
         }
 
         public void ShowControls()
         {
             if (pausePanel != null) pausePanel.SetActive(false);
             if (controlsPanel != null) controlsPanel.SetActive(true);
+
+            GameLogger.Instance?.LogEvent("UI", "Controls opened");
         }
 
         public void HideControls()
         {
             if (controlsPanel != null) controlsPanel.SetActive(false);
             if (pausePanel != null) pausePanel.SetActive(true);
+
+            GameLogger.Instance?.LogEvent("UI", "Controls closed");
         }
 
         public void RequestMainMenu()
@@ -124,8 +136,8 @@ namespace LostEnergy
 
         public void ConfirmMainMenu()
         {
-            Time.timeScale = 1f; // Sahne yüklerken zamanı geri açmayı unutma!
-            // Ana Menü sahnesinin Build Index'inin 0 olduğu varsayılıyor
+            GameLogger.Instance?.LogEvent("SCENE_LOAD", "Main Menu");
+            Time.timeScale = 1f;
             SceneManager.LoadScene(0);
         }
 

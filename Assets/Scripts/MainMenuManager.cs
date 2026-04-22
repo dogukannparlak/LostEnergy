@@ -22,11 +22,13 @@ namespace LostEnergy
 
         public void PlayGame()
         {
-            SceneLoader.LoadScene("SampleScene");   // LoadingScreen üzerinden geçiş
+            GameLogger.Instance?.LogEvent("SCENE_LOAD", "SampleScene");
+            SceneLoader.LoadScene("SampleScene");
         }
 
         public void ShowSettings()
         {
+            GameLogger.Instance?.LogEvent("UI", "Main Menu: Settings opened");
             if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
             if (settingsPanel != null) settingsPanel.SetActive(true);
             try { SettingsManager.RefreshAllFromSaved(); }
@@ -35,12 +37,14 @@ namespace LostEnergy
 
         public void ShowControls()
         {
+            GameLogger.Instance?.LogEvent("UI", "Main Menu: Controls opened");
             if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
             if (controlsPanel != null) controlsPanel.SetActive(true);
         }
 
         public void HideControls()
         {
+            GameLogger.Instance?.LogEvent("UI", "Main Menu: Controls closed");
             if (controlsPanel != null) controlsPanel.SetActive(false);
             if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
         }
@@ -54,6 +58,7 @@ namespace LostEnergy
 
         public void QuitGame()
         {
+            GameLogger.Instance?.LogEvent("QUIT", "Application quit");
             Debug.Log("[MainMenuManager] Oyundan Çıkılıyor...");
             Application.Quit();
         }

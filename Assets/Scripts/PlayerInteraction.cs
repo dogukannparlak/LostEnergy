@@ -64,7 +64,9 @@ public class PlayerInteraction : MonoBehaviour
 
         if (Time.time - _lastInteractPressedTime <= interactInputBuffer)
         {
+            string targetName = (_currentTarget as UnityEngine.Object)?.name ?? _currentTarget.GetType().Name;
             _currentTarget.Interact(this);
+            LostEnergy.GameLogger.Instance?.LogEvent("INTERACT", targetName);
             _lastInteractPressedTime = -999f;
         }
     }

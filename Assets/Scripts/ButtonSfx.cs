@@ -26,5 +26,7 @@ public class ButtonSfx : MonoBehaviour
                 clickSfx,
                 Camera.main != null ? Camera.main.transform.position : Vector3.zero,
                 volume * LostEnergy.SettingsManager.GetEffectiveSfxVolume01());
+
+        LostEnergy.GameLogger.Instance?.LogEvent("BUTTON", gameObject.name);
     }
 }

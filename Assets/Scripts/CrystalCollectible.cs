@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using LostEnergy;
 
 public class CrystalCollectible : MonoBehaviour, IInteractable
@@ -61,7 +62,14 @@ public class CrystalCollectible : MonoBehaviour, IInteractable
             : FindFirstObjectByType<GameManager>();
 
         if (gm != null)
+        {
             gm.AddCrystal(amount);
+
+            Vector3 pos = transform.position;
+            string scene = SceneManager.GetActiveScene().name;
+            string detail = $"{gm.CurrentCrystals}/{gm.targetCrystals} | Scene: {scene} | Pos: ({pos.x:F1}, {pos.y:F1}, {pos.z:F1})";
+            LostEnergy.GameLogger.Instance?.LogEvent("CRYSTAL", detail);
+        }
         else
             Debug.LogWarning("[CrystalCollectible] GameManager.Instance was not found!", this);
     }

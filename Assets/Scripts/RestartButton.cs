@@ -12,6 +12,7 @@ public class RestartButton : MonoBehaviour
 
     void OnClick()
     {
+        LostEnergy.GameLogger.Instance?.LogEvent("RESTART", "Returned to main menu");
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

@@ -94,6 +94,7 @@ public class OxygenSystem : MonoBehaviour
     void TriggerDepletion()
     {
         _depleted = true;
+        LostEnergy.GameLogger.Instance?.LogEvent("DEATH", "Oxygen depleted");
         OnOxygenDepleted?.Invoke();
         GameManager.Instance?.PlayerDied("Oksijen tükendi!");
     }

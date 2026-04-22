@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System;
 
 namespace LostEnergy
@@ -34,6 +35,10 @@ namespace LostEnergy
             if (musicSlider != null)  musicSlider.onValueChanged.AddListener(SetMusicVolume);
             if (sfxSlider != null)    sfxSlider.onValueChanged.AddListener(SetSFXVolume);
             if (muteToggle != null)   muteToggle.onValueChanged.AddListener(SetMute);
+
+            RegisterSliderDragLogger(masterSlider, "Master volume");
+            RegisterSliderDragLogger(musicSlider,  "Music volume");
+            RegisterSliderDragLogger(sfxSlider,    "SFX volume");
 
             LoadSettings();
         }
@@ -91,6 +96,7 @@ namespace LostEnergy
         public void SetMute(bool isMuted)
         {
             IsMuted = isMuted;
+            GameLogger.Instance?.LogEvent("MUTE", isMuted ? "Muted" : "Unmuted");
             PlayerPrefs.SetInt(MUTE_KEY, isMuted ? 1 : 0);
 
             if (isMuted)
@@ -155,6 +161,30 @@ namespace LostEnergy
         public static float GetEffectiveSfxVolume01()
         {
             return IsMuted ? 0f : Mathf.Clamp01(MasterVolume01 * SfxVolume01);
+        }
+
+        private void RegisterSliderDragLogger(Slider slider, string label)
+        {
+            if (slider == null) return;
+
+            EventTrigger trigger = slider.gameObject.GetComponent<EventTrigger>()
+                                ?? slider.gameObject.AddComponent<EventTrigger>();
+
+            float startVal = 0f;
+
+            var begin = new EventTrigger.Entry { eventID = EventTriggerType.BeginDrag };
+            begin.callback.AddListener(_ => startVal = slider.value);
+            trigger.triggers.Add(begin);
+
+            var end = new EventTrigger.Entry { eventID = EventTriggerType.EndDrag };
+            end.callback.AddListener(_ =>
+            {
+                float endVal = slider.value;
+                if (Mathf.Abs(endVal - startVal) < 0.001f) return;
+                string dir = endVal > startVal ? "increased" : "decreased";
+                GameLogger.Instance?.LogEvent("SETTINGS", $"{label} {dir}: {startVal:F2} → {endVal:F2}");
+            });
+            trigger.triggers.Add(end);
         }
     }
 }

@@ -13,7 +13,7 @@ public class GameOverRestartButton : MonoBehaviour
 
     void OnClick()
     {
-        // Restore normal game state before reloading.
+        LostEnergy.GameLogger.Instance?.LogEvent("RESTART", "Restarted after game over");
         Time.timeScale   = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible   = false;
