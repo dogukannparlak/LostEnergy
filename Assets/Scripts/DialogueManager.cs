@@ -17,6 +17,10 @@ public class DialogueManager : MonoBehaviour
     [Header("Settings")]
     public float oxygenResumeDelay = 2f;
 
+    [Header("Input")]
+    [Tooltip("Seconds the key must be held to advance dialogue.")]
+    public float holdDuration = 0.5f;
+
     [Header("Audio")]
     [Tooltip("Plays when the dialogue starts.")]
     public AudioClip dialogueStartSfx;
@@ -30,6 +34,7 @@ public class DialogueManager : MonoBehaviour
     private DialogueData _current;
     private int _index;
     private OxygenSystem _oxygenSystem;
+    private float _holdTimer = 0f;
 
     public bool IsActive { get; private set; }
 
@@ -67,10 +72,35 @@ public class DialogueManager : MonoBehaviour
     void Update()
     {
         if (!IsActive) return;
+        if (Keyboard.current == null) return;
 
-        // Press E to move to the next line.
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
-            NextLine();
+        // Tab: skip entire dialogue instantly.
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
+        {
+            SkipDialogue();
+            return;
+        }
+
+        // Space: hold for holdDuration seconds to advance.
+        if (Keyboard.current.spaceKey.isPressed)
+        {
+            _holdTimer += Time.deltaTime;
+            if (_holdTimer >= holdDuration)
+            {
+                _holdTimer = 0f;
+                NextLine();
+            }
+        }
+        else
+        {
+            _holdTimer = 0f;
+        }
+    }
+
+    void SkipDialogue()
+    {
+        _index = _current.lines.Length;
+        EndDialogue();
     }
 
     void ShowLine()
@@ -80,7 +110,7 @@ public class DialogueManager : MonoBehaviour
         lineText.text = line.text;
         bool isLast = (_index == _current.lines.Length - 1);
         if (continueHintText != null)
-            continueHintText.text = isLast ? "[E] X " : "[E] ›";
+            continueHintText.text = isLast ? "[Space Tut] Kapat  |  [Tab] Atla" : "[Space Tut] ›  |  [Tab] Atla";
     }
 
     void NextLine()
