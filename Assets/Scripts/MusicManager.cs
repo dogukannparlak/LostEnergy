@@ -3,25 +3,24 @@ using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Sahneler arası kalıcı arka plan müziği yöneticisi.
-/// Hierarchy'de boş bir objeye ekle, DontDestroyOnLoad ile hayatta kalır.
-/// Her sahneye farklı müzik atayabilirsin; boş bırakılırsa mevcut müzik devam eder.
+/// Persistent background music manager that survives scene loads.
+/// Assign per-scene clips; leave empty to continue the current track.
 /// </summary>
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance { get; private set; }
 
-    [Header("Varsayılan Müzik")]
-    [Tooltip("Hiçbir sahne müziği atanmamışsa çalar.")]
+    [Header("Default Music")]
+    [Tooltip("Plays when no scene-specific music is assigned.")]
     public AudioClip defaultMusic;
 
-    [Header("Sahne Bazlı Müzikler")]
+    [Header("Scene Music")]
     public SceneMusicEntry[] sceneMusics;
 
-    [Header("Ayarlar")]
+    [Header("Settings")]
     [Range(0f, 1f)] public float volume = 0.5f;
 
-    [Tooltip("AudioMixer'daki Music grubunu buraya sürükle.")]
+    [Tooltip("Assign the Music mixer group from the AudioMixer.")]
     public AudioMixerGroup musicMixerGroup;
 
     private AudioSource _source;
@@ -157,7 +156,7 @@ public class MusicManager : MonoBehaviour
 [System.Serializable]
 public class SceneMusicEntry
 {
-    [Tooltip("Build Settings'teki sahne adıyla aynı olmalı.")]
+    [Tooltip("Must match the scene name in Build Settings.")]
     public string    sceneName;
     public AudioClip music;
 }

@@ -46,7 +46,7 @@ namespace LostEnergy
         }
 
         /// <summary>
-        /// Bir olayı log dosyasına yazar.
+        /// Appends one event line to the log file.
         /// Format: [yyyy-MM-dd HH:mm:ss] | eventType | detail
         /// </summary>
         /// <param name="eventType">Event type (e.g. "CRYSTAL", "DEATH", "PAUSE")</param>

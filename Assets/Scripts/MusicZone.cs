@@ -4,7 +4,7 @@ using UnityEngine;
 public class MusicZone : MonoBehaviour
 {
     [Header("Music")]
-    [Tooltip("Oyuncu bu alana girince çalacak müzik.")]
+    [Tooltip("Music that plays when the player enters this zone.")]
     public AudioClip zoneMusic;
 
     private bool _playerInside;

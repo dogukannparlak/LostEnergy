@@ -3,20 +3,20 @@ using UnityEngine.SceneManagement;
 namespace LostEnergy
 {
     /// <summary>
-    /// Tüm sahne geçişlerini LoadingScreen üzerinden yönlendirir.
-    /// SceneManager.LoadScene() yerine her yerde bunu kullan.
+    /// Routes all scene transitions through the LoadingScreen scene.
+    /// Use this instead of SceneManager.LoadScene() everywhere.
     /// </summary>
     public static class SceneLoader
     {
         private const string LOADING_SCENE = "LoadingScreen";
 
-        /// <summary>LoadingScreen'in yükleyeceği hedef sahne adı.</summary>
+        /// <summary>Target scene to load after the loading screen.</summary>
         public static string TargetScene { get; private set; }
 
-        /// <summary>LoadingScreen'in en az kaç saniye gösterileceği.</summary>
+        /// <summary>Minimum seconds the loading screen will be shown.</summary>
         public static float MinDisplayTime { get; private set; } = 1.5f;
 
-        /// <param name="minDisplayTime">Yükleme bitse bile kaç saniye beklensin. 0 = anında geç.</param>
+        /// <param name="minDisplayTime">Seconds to wait even if load finishes early. 0 = instant.</param>
         public static void LoadScene(string sceneName, float minDisplayTime = 1.5f)
         {
             TargetScene    = sceneName;

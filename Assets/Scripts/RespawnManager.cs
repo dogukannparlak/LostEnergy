@@ -30,11 +30,11 @@ public class RespawnManager : MonoBehaviour
         if (oxygenSystem == null && playerRoot != null)
             oxygenSystem = playerRoot.GetComponent<OxygenSystem>();
 
-        if (playerRoot       == null) Debug.LogError("[RespawnManager] 'playerRoot' atanmamış!",       this);
-        if (respawnPoint     == null) Debug.LogError("[RespawnManager] 'respawnPoint' atanmamış!",     this);
-        if (oxygenSystem     == null) Debug.LogError("[RespawnManager] 'oxygenSystem' bulunamadı!",    this);
-        if (characterController == null) Debug.LogWarning("[RespawnManager] 'characterController' bulunamadı.", this);
-        if (losePanel        == null) Debug.LogWarning("[RespawnManager] 'losePanel' atanmamış.", this);
+        if (playerRoot       == null) Debug.LogError("[RespawnManager] 'playerRoot' is not assigned!",       this);
+        if (respawnPoint     == null) Debug.LogError("[RespawnManager] 'respawnPoint' is not assigned!",     this);
+        if (oxygenSystem     == null) Debug.LogError("[RespawnManager] 'oxygenSystem' not found!",    this);
+        if (characterController == null) Debug.LogWarning("[RespawnManager] 'characterController' not found.", this);
+        if (losePanel        == null) Debug.LogWarning("[RespawnManager] 'losePanel' is not assigned.", this);
         else losePanel.SetActive(false);
 
         if (GameManager.Instance != null)
@@ -53,11 +53,11 @@ public class RespawnManager : MonoBehaviour
     {
         if (_respawning) return;
         _respawning = true;
-        
+
         if (losePanel != null) losePanel.SetActive(true);
     }
 
-    // Bu fonksiyonu "Yeniden Başla" (Restart) butonu çağıracak
+    // Called by the Restart button.
     public void TriggerManualRespawn()
     {
         Teleport();
@@ -70,7 +70,7 @@ public class RespawnManager : MonoBehaviour
         if (losePanel != null) losePanel.SetActive(false);
 
         _respawning = false;
-        Time.timeScale = 1f; // Oyunu dondurmuştuk, tekrar başlat
+        Time.timeScale = 1f; // Resume time after freeze
     }
 
     void Teleport()

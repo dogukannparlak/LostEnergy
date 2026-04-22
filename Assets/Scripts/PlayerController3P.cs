@@ -35,10 +35,10 @@ public class PlayerController3P : MonoBehaviour
         _cc       = GetComponent<CharacterController>();
 
         if (cameraTransform == null)
-            Debug.LogError("[PlayerController3P] 'cameraTransform' atanmamış!", this);
+            Debug.LogError("[PlayerController3P] 'cameraTransform' is not assigned!", this);
 
         if (cameraPivot == null)
-            Debug.LogWarning("[PlayerController3P] 'cameraPivot' atanmamış.", this);
+            Debug.LogWarning("[PlayerController3P] 'cameraPivot' is not assigned.", this);
 
         LockCursor();
 

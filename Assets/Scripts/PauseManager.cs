@@ -10,7 +10,7 @@ namespace LostEnergy
         public GameObject pausePanel;
         public GameObject settingsPanel;
         public GameObject confirmQuitPanel;
-        public GameObject controlsPanel;    // Kontrol şeması paneli
+        public GameObject controlsPanel;    // Controls layout panel
 
         private bool _isPaused = false;
 
@@ -24,11 +24,9 @@ namespace LostEnergy
 
         void Update()
         {
-            // Eğer karakter ölüyse (Game Over), menüyü açmayı engellemek iyi olabilir,
-            // ama şuan basit tutuyoruz.
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                // Ayarlar veya Çıkış onayı açıksa onu kapat (Geri git)
+                // Close active sub-panel (back)
                 if (settingsPanel != null && settingsPanel.activeSelf)
                 {
                     settingsPanel.SetActive(false);

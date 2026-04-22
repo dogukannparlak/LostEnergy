@@ -5,10 +5,10 @@ using LostEnergy;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("HUD — Kristal")]
+    [Header("HUD — Crystal")]
     public TMP_Text crystalText;
 
-    [Header("HUD — Oksijen")]
+    [Header("HUD — Oxygen")]
     public Slider oxygenSlider;
     public TMP_Text oxygenValueText;
 

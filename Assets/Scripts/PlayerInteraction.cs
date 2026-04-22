@@ -49,7 +49,7 @@ public class PlayerInteraction : MonoBehaviour
 
         bool dialogueActive = DialogueManager.Instance != null && DialogueManager.Instance.IsActive;
 
-        // Diyalog aktifse veya az önce kapandıysa (aynı frame) E'yi yoksay
+        // Skip interaction while dialogue is active or just closed
         if (dialogueActive || _wasDialogueActive)
         {
             _wasDialogueActive = dialogueActive;

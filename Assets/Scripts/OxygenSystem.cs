@@ -26,12 +26,11 @@ public class OxygenSystem : MonoBehaviour
         _uiManager    = FindFirstObjectByType<UIManager>();
         FireOxygenChanged();
 
-        // Start'ta abone olunur: bu noktada tüm Awake'ler bitmiş,
-        // GameManager.Instance kesinlikle set edilmiştir.
+        // Subscribe here; all Awake calls have completed by Start.
         if (GameManager.Instance != null)
             GameManager.Instance.OnCrystalCollected += OnCrystalCollected;
         else
-            Debug.LogWarning("[OxygenSystem] GameManager.Instance bulunamadı, crystalBonus çalışmayacak!", this);
+            Debug.LogWarning("[OxygenSystem] GameManager.Instance not found; crystalBonus will not work.", this);
     }
 
     void OnDisable()

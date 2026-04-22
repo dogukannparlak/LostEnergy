@@ -8,11 +8,11 @@ namespace LostEnergy
         [Header("UI Panels")]
         public GameObject mainMenuPanel;
         public GameObject settingsPanel;
-        public GameObject controlsPanel;    // Kontrol şeması paneli
+        public GameObject controlsPanel;    // Controls layout panel
 
         void Start()
         {
-            // Menü başlarken zamanın normal aktığından ve imlecin serbest olduğundan emin ol
+            // Ensure time runs normally and cursor is free
             Time.timeScale = 1f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -32,7 +32,7 @@ namespace LostEnergy
             if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
             if (settingsPanel != null) settingsPanel.SetActive(true);
             try { SettingsManager.RefreshAllFromSaved(); }
-            catch (System.Exception e) { Debug.LogWarning("[MainMenuManager] SettingsManager.RefreshAllFromSaved hata verdi: " + e.Message); }
+            catch (System.Exception e) { Debug.LogWarning("[MainMenuManager] SettingsManager.RefreshAllFromSaved failed: " + e.Message); }
         }
 
         public void ShowControls()
@@ -59,7 +59,7 @@ namespace LostEnergy
         public void QuitGame()
         {
             GameLogger.Instance?.LogEvent("QUIT", "Application quit");
-            Debug.Log("[MainMenuManager] Oyundan Çıkılıyor...");
+            Debug.Log("[MainMenuManager] Quitting application...");
             Application.Quit();
         }
     }

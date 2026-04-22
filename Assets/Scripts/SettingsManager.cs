@@ -59,7 +59,7 @@ namespace LostEnergy
             if (audioMixer != null)
             {
                 bool ok = audioMixer.SetFloat("MasterVol", db);
-                if (!ok) Debug.LogWarning("[SettingsManager] 'MasterVol' parametresi AudioMixer'da bulunamadı! Exposed Parameters'dan adı kontrol et.");
+                if (!ok) Debug.LogWarning("[SettingsManager] 'MasterVol' parameter not found in AudioMixer. Check Exposed Parameters.");
             }
             PlayerPrefs.SetFloat(MASTER_KEY, volume);
             AudioSettingsChanged?.Invoke();
@@ -73,7 +73,7 @@ namespace LostEnergy
             if (audioMixer != null)
             {
                 bool ok = audioMixer.SetFloat("MusicVol", db);
-                if (!ok) Debug.LogWarning("[SettingsManager] 'MusicVol' parametresi AudioMixer'da bulunamadı!");
+                if (!ok) Debug.LogWarning("[SettingsManager] 'MusicVol' parameter not found in AudioMixer.");
             }
             PlayerPrefs.SetFloat(MUSIC_KEY, volume);
             AudioSettingsChanged?.Invoke();
@@ -87,7 +87,7 @@ namespace LostEnergy
             if (audioMixer != null)
             {
                 bool ok = audioMixer.SetFloat("SFXVol", db);
-                if (!ok) Debug.LogWarning("[SettingsManager] 'SFXVol' parametresi AudioMixer'da bulunamadı!");
+                if (!ok) Debug.LogWarning("[SettingsManager] 'SFXVol' parameter not found in AudioMixer.");
             }
             PlayerPrefs.SetFloat(SFX_KEY, volume);
             AudioSettingsChanged?.Invoke();

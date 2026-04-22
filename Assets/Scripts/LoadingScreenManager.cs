@@ -10,24 +10,24 @@ namespace LostEnergy
     {
         [Header("Progress Bar")]
         public Slider progressBar;
-        public TMP_Text progressText;       // "75%" yazısı
-        public Image    fillImage;          // Slider'ın Fill alanı — renk animasyonu için
+        public TMP_Text progressText;       // Displays percentage text
+        public Image    fillImage;          // Slider fill image for color animation
 
         [Header("Loading Title")]
-        public TMP_Text loadingTitleText;   // "LOADING..." yazısı
-        [Tooltip("Nokta animasyonu hızı (saniye başına değişim).")]
+        public TMP_Text loadingTitleText;   // Loading title text
+        [Tooltip("Dot animation speed (changes per second).")]
         public float dotSpeed = 0.4f;
 
         [Header("Loading Image")]
-        public Image loadingImage;          // arka plan veya ipucu resmi
-        public Sprite[] loadingSprites;     // birden fazla varsa random seçilir
+        public Image loadingImage;
+        public Sprite[] loadingSprites;
 
         [Header("Settings")]
-        [Tooltip("SceneLoader.LoadScene() ile override edilmezse bu değer kullanılır.")]
+        [Tooltip("Used when not overridden by SceneLoader.LoadScene().")]
         public float fallbackDisplayTime = 1.5f;
 
         [Header("Editor Test")]
-        [Tooltip("Sadece Editor'da direkt Play basınca kullanılır. Build'de etkisi yok.")]
+        [Tooltip("Editor only: used when Play is pressed directly without SceneLoader.")]
         public string editorTestScene = "SampleScene";
 
         private float _dotTimer;
@@ -35,7 +35,7 @@ namespace LostEnergy
 
         void Start()
         {
-            // Resim seç
+            // Select a random loading image
             if (loadingImage != null && loadingSprites != null && loadingSprites.Length > 0)
                 loadingImage.sprite = loadingSprites[Random.Range(0, loadingSprites.Length)];
 
@@ -51,15 +51,15 @@ namespace LostEnergy
             if (string.IsNullOrEmpty(target))
             {
 #if UNITY_EDITOR
-                Debug.LogWarning("[LoadingScreen] TargetScene boş — Editor test modu: " + editorTestScene);
+                Debug.LogWarning("[LoadingScreen] TargetScene is empty — using editor test scene: " + editorTestScene);
                 target = editorTestScene;
 #else
-                Debug.LogError("[LoadingScreen] Hedef sahne boş! SceneLoader.LoadScene() kullanımına geç.");
+                Debug.LogError("[LoadingScreen] Target scene is empty! Use SceneLoader.LoadScene() instead.");
                 return;
 #endif
             }
 
-            // SceneLoader'da ayarlanan süreyi kullan; yoksa fallback değer
+            // Use duration from SceneLoader, or fall back to default
             float minTime = SceneLoader.MinDisplayTime > 0f
                 ? SceneLoader.MinDisplayTime
                 : fallbackDisplayTime;
@@ -69,7 +69,7 @@ namespace LostEnergy
 
         void Update()
         {
-            // "LOADING." → "LOADING.." → "LOADING..." animasyonu
+            // Animate loading dots: "LOADING." → "LOADING.." → "LOADING..."
             if (loadingTitleText == null) return;
             _dotTimer += Time.deltaTime;
             if (_dotTimer >= dotSpeed)
@@ -83,7 +83,7 @@ namespace LostEnergy
         private IEnumerator LoadAsync(string sceneName, float minDisplayTime)
         {
             float elapsed         = 0f;
-            float displayedProgress = 0f;   // ekranda gösterilen yumuşak değer
+            float displayedProgress = 0f;
 
             AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
             op.allowSceneActivation = false;
@@ -92,25 +92,25 @@ namespace LostEnergy
             {
                 elapsed += Time.deltaTime;
 
-                // Gerçek yükleme ilerlemesi (0 → 1)
+                // Real load progress (0 → 1)
                 float realProgress = Mathf.Clamp01(op.progress / 0.9f);
 
-                // Süreye göre beklenen görsel ilerleme (minDisplayTime boyunca 0 → 1)
+                // Time-based visual progress over minDisplayTime (0 → 1)
                 float timedProgress = minDisplayTime > 0f
                     ? Mathf.Clamp01(elapsed / minDisplayTime)
                     : realProgress;
 
-                // İkisinin minimumunu al — gerçek yükleme geri gitmesin,
-                // ama zamandan da önce %100 görünmesin
+                // Take the minimum so real progress never goes backward
+                // and visual progress never reaches 100% before time elapses
                 float targetProgress = Mathf.Min(realProgress, timedProgress);
 
-                // Lerp ile yumuşat (hızı ayarlamak için 8f'yi değiştirebilirsin)
+                // Smooth with lerp
                 displayedProgress = Mathf.Lerp(displayedProgress, targetProgress, Time.deltaTime * 8f);
 
                 if (progressBar  != null) progressBar.value = displayedProgress;
                 if (progressText != null) progressText.text = Mathf.RoundToInt(displayedProgress * 100f) + "%";
 
-                // Gerçek yükleme bitti VE minimum süre doldu VE görsel %99'a ulaştı
+                // Activate once load is done, min time elapsed, and visual progress is complete
                 if (op.progress >= 0.9f && elapsed >= minDisplayTime && displayedProgress >= 0.99f)
                     op.allowSceneActivation = true;
 
