@@ -38,7 +38,17 @@ namespace LostEnergy
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            _logFilePath = Path.Combine(Application.persistentDataPath, "game_log.txt");
+#if UNITY_EDITOR
+            string logsDir = Path.Combine(
+                Directory.GetParent(Application.dataPath).FullName, "Logs", "Sessions");
+#else
+            string logsDir = Path.Combine(
+                Path.GetDirectoryName(Application.dataPath), "Logs");
+#endif
+            Directory.CreateDirectory(logsDir);
+
+            string fileName = $"session_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.log";
+            _logFilePath = Path.Combine(logsDir, fileName);
 
             WriteSessionHeader();
 
