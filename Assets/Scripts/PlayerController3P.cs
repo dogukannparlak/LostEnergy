@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController3P : MonoBehaviour
@@ -24,15 +27,46 @@ public class PlayerController3P : MonoBehaviour
     public float pitchMin = -30f;
     public float pitchMax =  60f;
 
+    [Header("Animasyon (AnimationPlayer)")]
+    [Tooltip("Karakterdeki AnimationPlayer bileşeni (boş bırakılırsa otomatik bulunur).")]
+    public AnimationPlayer animationPlayer;
+    [Tooltip("Idle animasyonunun listeki indeksi")]
+    public int idleIndex   = 0;
+    [Tooltip("Yürüme animasyonunun listeki indeksi")]
+    public int walkIndex   = 1;
+    [Tooltip("Koşma animasyonunun listeki indeksi")]
+    public int runIndex    = 2;
+    [Tooltip("Zıplama animasyonunun listeki indeksi")]
+    public int jumpIndex   = 3;
+
     private CharacterController _cc;
     private float               _verticalVelocity;
     private float               _yaw;
     private float               _pitch;
     private bool                _isDead;
+    private bool                _wasGrounded;
+    private int                 _currentAnimIndex = -1;
+
+#if UNITY_EDITOR
+    // Component ilk eklendiğinde CharacterController'ı otomatik ayarla
+    private void Reset()
+    {
+        var cc = GetComponent<CharacterController>();
+        if (cc == null) return;
+        cc.height = 1.8f;
+        cc.center = new Vector3(0f, 0.93f, 0f);
+        cc.radius = 0.3f;
+        cc.stepOffset = 0.3f;
+        cc.skinWidth  = 0.08f;
+    }
+#endif
 
     void Start()
     {
-        _cc       = GetComponent<CharacterController>();
+        _cc = GetComponent<CharacterController>();
+
+        if (animationPlayer == null)
+            animationPlayer = GetComponent<AnimationPlayer>();
 
         if (cameraTransform == null)
             Debug.LogError("[PlayerController3P] 'cameraTransform' is not assigned!", this);
@@ -47,6 +81,9 @@ public class PlayerController3P : MonoBehaviour
             _yaw   = cameraTransform.eulerAngles.y;
             _pitch = cameraTransform.eulerAngles.x;
         }
+
+        _wasGrounded = IsGrounded();
+        PlayAnim(idleIndex);
     }
 
     void Update()
@@ -71,6 +108,7 @@ public class PlayerController3P : MonoBehaviour
         HandleCursorToggle();
         HandleCameraOrbit();
         HandleMovement();
+        UpdateAnimation();
     }
 
     void LockCursor()
@@ -164,6 +202,49 @@ public class PlayerController3P : MonoBehaviour
         _cc.Move((moveDir * speed + Vector3.up * _verticalVelocity) * Time.deltaTime);
     }
 
+    void UpdateAnimation()
+    {
+        if (animationPlayer == null) return;
+
+        bool grounded = IsGrounded();
+
+        // Zıplama başladı
+        if (!grounded && _wasGrounded)
+        {
+            PlayAnim(jumpIndex);
+            _wasGrounded = false;
+            return;
+        }
+
+        // Yere indi
+        if (grounded && !_wasGrounded)
+            _wasGrounded = true;
+
+        if (!grounded) return;
+
+        // Yatay hareket hızı
+        Vector3 horizontal = new Vector3(_cc.velocity.x, 0f, _cc.velocity.z);
+        float speed = horizontal.magnitude;
+
+        int targetIndex;
+        if (speed < 0.1f)
+            targetIndex = idleIndex;
+        else if (Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed)
+            targetIndex = runIndex;
+        else
+            targetIndex = walkIndex;
+
+        PlayAnim(targetIndex);
+    }
+
+    void PlayAnim(int index)
+    {
+        if (animationPlayer == null) return;
+        if (_currentAnimIndex == index) return;
+        _currentAnimIndex = index;
+        animationPlayer.PlayByIndex(index);
+    }
+
     bool IsGrounded()
     {
         if (_cc.isGrounded) return true;
@@ -177,4 +258,42 @@ public class PlayerController3P : MonoBehaviour
             ~LayerMask.GetMask("Player"),
             QueryTriggerInteraction.Ignore);
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// CharacterController'ı karakterin mesh sınırlarına göre otomatik ayarlar.
+    /// Inspector'daki sağ tık menüsünden çağır.
+    /// </summary>
+    [ContextMenu("CharacterController'ı Otomatik Ayarla (Gömülme Düzelt)")]
+    private void AutoFitCharacterController()
+    {
+        var cc = GetComponent<CharacterController>();
+        if (cc == null) return;
+
+        // Tüm SkinnedMeshRenderer'ları topla
+        var renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        if (renderers.Length == 0)
+        {
+            var meshRenderers = GetComponentsInChildren<MeshRenderer>();
+            if (meshRenderers.Length == 0) { Debug.LogWarning("Mesh bulunamadı."); return; }
+        }
+
+        Bounds bounds = new Bounds(transform.position, Vector3.zero);
+        foreach (var r in GetComponentsInChildren<Renderer>())
+            bounds.Encapsulate(r.bounds);
+
+        // Lokal koordinata çevir
+        float height = bounds.size.y;
+        float centerY = bounds.center.y - transform.position.y;
+        float radius = Mathf.Max(bounds.size.x, bounds.size.z) * 0.25f;
+
+        Undo.RecordObject(cc, "AutoFit CharacterController");
+        cc.height = height;
+        cc.center = new Vector3(0f, centerY, 0f);
+        cc.radius = Mathf.Min(radius, height * 0.4f);
+
+        EditorUtility.SetDirty(cc);
+        Debug.Log($"[PlayerController3P] CharacterController ayarlandı → Height:{height:F2}  CenterY:{centerY:F2}  Radius:{cc.radius:F2}");
+    }
+#endif
 }

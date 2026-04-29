@@ -1,4 +1,4 @@
-# LOST ENERGY
+﻿# LOST ENERGY
 
 ## Game Design Document
 
@@ -59,6 +59,7 @@ This version represents the submission-ready current design document for the Los
 - Main menu, pause menu, settings panel, and loading screen implemented.
 - NPC dialogue system, scene transition flow, and basic audio management completed.
 - Asset, resource, and license information integrated into the document.
+- Clip-based character animation system (`AnimationPlayer`) added using Unity Playables API; idle, walk, run, and jump states driven automatically by `PlayerController3P`.
 
 ---
 
@@ -347,7 +348,7 @@ Main Menu
 | Property             | Description                                                                                                                                                                                                                            |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Model                | Kenney Animated Characters Protagonists                                                                                                                                                                                                |
-| Control Setup        | `PlayerController3P` + `CharacterController`                                                                                                                                                                                       |
+| Control Setup        | `PlayerController3P` + `CharacterController` + `AnimationPlayer`                                                                                                                                                                                       |
 | Primary Goal         | Collect crystals and reach the exit under oxygen management                                                                                                                                                                            |
 | Death Conditions     | Oxygen reaching zero or falling such that `Y <-1`                                                                                                                                                                                    |
 | Narrative Background | A figure trapped within an unfinished creation whose reason for existing is unclear. Initially reactive and survival-driven — a stranger to the system. By Scene 3, capable of a conscious choice about their place within the cycle. |
@@ -847,18 +848,19 @@ LostEnergy Namespace
 
 ### Core Scripts
 
-| Script                   | Responsibility                                       |
-| ------------------------ | ---------------------------------------------------- |
-| `PlayerController3P`   | Character movement, sprint, jump, and orbit camera   |
-| `OxygenSystem`         | Oxygen consumption and replenishment                 |
-| `GameManager`          | Crystal counting, objective checking, and death flow |
-| `CrystalCollectible`   | Crystal interaction, SFX and VFX triggering          |
-| `HazardZone`           | Applying additional oxygen drain                     |
-| `DialogueManager`      | Dialogue flow and oxygen pausing                     |
-| `RespawnManager`       | Position reset after death                           |
-| `PauseManager`         | Pause flow and panel management                      |
-| `LoadingScreenManager` | Asynchronous scene loading and loading screen        |
-| `GameLogger`           | File-based session event logger                      |
+| Script                   | Responsibility                                                                      |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| `PlayerController3P`   | Character movement, sprint, jump, orbit camera, and animation state driving         |
+| `AnimationPlayer`      | Clip-based animation playback via Unity Playables API; driven by `PlayerController3P` |
+| `OxygenSystem`         | Oxygen consumption and replenishment                                                |
+| `GameManager`          | Crystal counting, objective checking, and death flow                                |
+| `CrystalCollectible`   | Crystal interaction, SFX and VFX triggering                                         |
+| `HazardZone`           | Applying additional oxygen drain                                                    |
+| `DialogueManager`      | Dialogue flow and oxygen pausing                                                    |
+| `RespawnManager`       | Position reset after death                                                          |
+| `PauseManager`         | Pause flow and panel management                                                     |
+| `LoadingScreenManager` | Asynchronous scene loading and loading screen                                       |
+| `GameLogger`           | File-based session event logger                                                     |
 
 *Table 18. Core script inventory and their primary responsibilities. Scripts communicate through C# events (`UnityAction`, `Action<T>`) rather than direct references, keeping coupling low.*
 
@@ -907,6 +909,7 @@ Each session creates a new timestamped log file. A header block is written at st
 - **`SettingsManager` uses `PlayerPrefs`**: Volume preferences persist between play sessions without requiring a save file. A `ScriptableObject`-based approach was considered but rejected as unnecessarily complex for three simple float values.
 - **References cached in `Start()`**: Components are located once at initialization and stored in private fields. Calling `GetComponent<T>()` every frame inside `Update()` at 60 fps would add unnecessary overhead across all active scripts.
 - **`GameLogger` uses `RuntimeInitializeOnLoadMethod`**: The logger is spawned automatically before the first scene loads, eliminating the need to place it manually in every scene. File writes are guarded with a `lock` to prevent race conditions if multiple events fire on the same frame.
+- **`AnimationPlayer` uses Unity Playables API**: Direct clip playback is handled via `PlayableGraph` + `AnimationMixerPlayable`, bypassing the Animator Controller entirely. The `AnimatorOverrideController` approach was evaluated first but requires a placeholder clip assigned to each state — leaving a state with no motion causes the override index lookup to silently fail. Playables allows runtime clip switching and crossfading without any controller pre-configuration.
 
 ### Performance Notes
 
