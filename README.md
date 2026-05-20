@@ -6,7 +6,7 @@
 
 | Title            | Info                        |
 | ---------------- | --------------------------- |
-| Developer        | Doğukan Parlak - 221805040 |
+| Developer        | Doğukan Parlak              |
 | Engine           | Unity 6 (URP)               |
 | Target Platform  | Windows (PC)                |
 | Document Version | 1.0                         |
@@ -51,7 +51,7 @@
 
 ### Version 1.0
 
-This version represents the submission-ready current design document for the Lost Energy project.
+This version represents the current design document for the Lost Energy project.
 
 - Three playable scenes completed: `SampleScene`, `SampleScene2`, `SampleScene3`.
 - Third-person character control, orbit camera, and interaction system integrated.
@@ -78,7 +78,7 @@ Lost Energy is a single-player third-person adventure game. The player manages t
 - Build gameplay that is quickly understood through simple rules yet creates sustained pressure.
 - Use the oxygen mechanic simultaneously as a life indicator, time pressure, and strategic resource.
 - Combine environmental threats, exploration, and storytelling into a short yet cohesive experience.
-- Produce a vertical slice with a manageable scope for academic submission that feels complete.
+- Produce a vertical slice with a manageable scope that feels complete and polished.
 
 ### Core Design Principles
 

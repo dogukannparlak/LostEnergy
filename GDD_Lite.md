@@ -5,8 +5,7 @@
 ### Project Information
 
 **Project Name:** Lost Energy
-**Document Owner:** Dogukan Parlak
-**Student ID:** 221805040
+**Developer:** Dogukan Parlak
 **Engine:** Unity 6 (URP)
 **Target Platform:** Windows (PC)
 
@@ -130,19 +129,18 @@ The project will be built in Unity as a set of small and manageable systems:
 - `PauseManager`: pause menu management
 - `UIManager`: HUD, warnings, and result panels
 
-This structure keeps the system modular and ensures that the project remains manageable at a student-project scope.
+This structure keeps the system modular and ensures that the project remains maintainable and extensible.
 
-## Minimum Delivery Target
+## Core Feature Set
 
-The main demonstrable outputs for this project are:
+The key gameplay systems that define the experience:
 
-- a working main menu
-- playable game scenes
-- third-person character control
-- oxygen and crystal systems
-- danger zones
-- exit objective and gate opening logic
-- simple win and lose screens
+- main menu and scene navigation
+- three distinct playable islands
+- third-person character control with orbit camera
+- oxygen resource system with hazard zones
+- crystal collection and exit gate progression
+- win, lose, and restart flow
 
 ## Risks and Scope Control
 
@@ -154,8 +152,8 @@ The biggest risk in the project is expanding the scope by adding unnecessary fea
 - in-scene progression
 - basic UI and feedback
 
-NPC dialogue, branching endings, denser story layers, and advanced visual effects should only be considered after the core gameplay is complete.
+NPC dialogue, branching endings, denser story layers, and advanced visual effects are treated as secondary features to be layered on top of a solid core.
 
-## Why Is This Project Suitable for the Course?
+## Future Development
 
-Lost Energy is a good fit for this course because it directly satisfies the third-person gameplay requirement, supports a structured multi-scene game flow, and makes player progress measurable through clear systems such as oxygen, crystals, and the exit objective. The project scope is also realistic for a student production; it can first be built as a core prototype focused on movement, collection, and survival, then expanded with UI, audio, scene transitions, and stronger presentation quality for a more polished final submission. This structure makes the project both technically manageable and sufficiently substantial in terms of course outcomes.
+Lost Energy's modular architecture is designed to support gradual expansion. The core prototype (movement, collection, survival) forms a stable foundation that can be extended with additional islands, a more developed narrative, new hazard types, and enhanced visual effects without requiring major system rewrites.
